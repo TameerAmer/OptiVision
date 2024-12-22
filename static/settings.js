@@ -1,25 +1,33 @@
 // Theme toggle functionality
-document.addEventListener("DOMContentLoaded", function () {
-    const themeToggle = document.getElementById("theme-toggle");
-    const themeIcon = document.getElementById("theme-icon");
-    // Check saved theme preference
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.body.classList.add("dark-mode");
-      themeIcon.classList.replace("fa-moon", "fa-sun");
-    }
-    themeToggle.addEventListener("click", function () {
-      document.body.classList.toggle("dark-mode");
-      const isDarkMode = document.body.classList.contains("dark-mode");
-      // Update icon
-      if (isDarkMode) {
-        themeIcon.classList.replace("fa-moon", "fa-sun");
-        localStorage.setItem("theme", "dark");
-      } else {
-        themeIcon.classList.replace("fa-sun", "fa-moon");
-        localStorage.setItem("theme", "light");
-      }
-    });
+if (localStorage.getItem('darkMode') === 'enabled') {
+  document.body.classList.add('dark-mode');
+  document.getElementById('theme-icon').classList.remove('fa-moon');
+  document.getElementById('theme-icon').classList.add('fa-sun');
+}
+
+// Dark/Light Mode Toggle Function
+document.getElementById('theme-toggle').addEventListener('click', function() {
+  // Toggle Dark Mode on body
+  document.body.classList.toggle('dark-mode');OptiVision
+  Dashboard
+  Tests
+  Reports
+  Settings
+  Logout
+  
+
+  // Change icon between moon and sun
+  const themeIcon = document.getElementById('theme-icon');
+  if (document.body.classList.contains('dark-mode')) {
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+      localStorage.setItem('darkMode', 'enabled');  // Save dark mode preference
+  } else {
+      themeIcon.classList.remove('fa-sun');
+      themeIcon.classList.add('fa-moon');
+      localStorage.setItem('darkMode', 'disabled');  // Save light mode preference
+  }
+
     // Profile form submission
     const profileForm = document.getElementById("profile-form");
     profileForm.addEventListener("submit", async function (e) {
