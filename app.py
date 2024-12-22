@@ -94,10 +94,26 @@ def logout():
 def allTests():
     if 'user_name' not in session:
         return redirect(url_for('login'))
+    user_id = session['user_id']
+
+    # Get all test counts in one query
+    test_counts = db.test_count(user_id)
+
     user_name = session['user_name']
-    response = make_response(render_template('allTests.html', user_name=user_name))
+    response = make_response(
+        render_template(
+            'allTests.html', 
+            user_name=user_name,
+            visual_acuity=test_counts.get('visual_acuity', 0),
+            color_vision=test_counts.get('color_vision', 0),
+            contrast_vision=test_counts.get('contrast_vision', 0),
+            blur_check=test_counts.get('blur_check', 0),
+            watch_dot=test_counts.get('watch_dot', 0)
+        )
+    )
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, proxy-revalidate'
     return response
+
 
 @app.route('/VisualAcuityTest')
 def VisualAcuityTest():

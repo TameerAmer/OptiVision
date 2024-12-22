@@ -265,12 +265,25 @@ class ConnectDatabase:
 
             cursor = connection.cursor()
             
-            # Count all visual acuity test results for this user
-            query = "SELECT COUNT(*) FROM visual_acuity WHERE user_id = %s"
-            cursor.execute(query, (user_id,))
+            # Combined query to count tests from all tables
+            query = """
+                SELECT COUNT(*) AS total_tests
+                FROM (
+                    SELECT test_id FROM blur_check WHERE user_id = %s
+                    UNION ALL
+                    SELECT test_id FROM color_vision WHERE user_id = %s
+                    UNION ALL
+                    SELECT test_id FROM contrast_vision WHERE user_id = %s
+                    UNION ALL
+                    SELECT test_id FROM visual_acuity WHERE user_id = %s
+                    UNION ALL
+                    SELECT test_id FROM watch_dot WHERE user_id = %s
+                ) AS all_tests;
+            """
+            cursor.execute(query, (user_id, user_id, user_id, user_id, user_id))
             return cursor.fetchone()[0]
 
-        except Error as e:
+        except Exception as e:
             print(f"Error getting total tests count: {e}")
             return 0
         finally:
@@ -278,6 +291,7 @@ class ConnectDatabase:
                 cursor.close()
             if connection:
                 connection.close()
+
 
     def update_profile(self, user_id, username, email):
         connection = None
@@ -358,4 +372,44 @@ class ConnectDatabase:
                 cursor.close()
             if connection:
                 connection.close()
+
+
+    def test_count(self, user_id):
+        connection = None
+        cursor = None
+        try:
+            connection = self.get_connection()
+            if not connection:
+                return {}
+
+            cursor = connection.cursor()
+
+            # Single query to count tests from all tables
+            query = """
+                SELECT 'visual_acuity' AS test_name, COUNT(*) AS test_count FROM visual_acuity WHERE user_id = %s
+                UNION ALL
+                SELECT 'color_vision', COUNT(*) FROM color_vision WHERE user_id = %s
+                UNION ALL
+                SELECT 'contrast_vision', COUNT(*) FROM contrast_vision WHERE user_id = %s
+                UNION ALL
+                SELECT 'blur_check', COUNT(*) FROM blur_check WHERE user_id = %s
+                UNION ALL
+                SELECT 'watch_dot', COUNT(*) FROM watch_dot WHERE user_id = %s
+            """
+            cursor.execute(query, (user_id, user_id, user_id, user_id, user_id))
+            
+            # Fetch all results into a dictionary
+            results = cursor.fetchall()
+            return {row[0]: row[1] for row in results}
+
+        except Exception as e:
+            print(f"Error getting test counts: {e}")
+            return {}
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+
+
 
