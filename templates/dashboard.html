@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiVision - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>OptiVision</h2>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}" class="active"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li><a href="{{ url_for('TestsSection') }}"><i class="fas fa-tasks"></i> Tests</a></li>
+                    <li><a href="{{ url_for('reports') }}"><i class="fas fa-file-alt"></i> Reports</a></li>
+                    <li><a href="{{ url_for('settings') }}"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h1>Welcome, {{ user_name }}</h1>
+                <button id="theme-toggle">
+                    <i class="fas fa-moon" id="theme-icon"></i> <!-- Moon icon for dark mode -->
+                </button>
+            </header>
+
+            <section class="stats">
+                <div class="card">
+                    <h3>Total Tests</h3>
+                    <p>{{ total_tests }}</p>
+                </div>
+            </section>
+            <div class="StartTestButton">
+                <a href="{{ url_for('allTests') }}" class="AllTestsButton">Start Test</a>
+            </div>
+        </main>
+    </div>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About OptiVision</h3>
+                <p>OptiVision provides advanced tools to help you maintain your vision health. Empowering you with
+                    personalized care and early detection.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <p>If you have any questions or inquiries, feel free to reach out to us:</p>
+                <p>Owners: <a href="mailto:tameer.amer@e.braude.ac.il">tameer.amer@e.braude.ac.il</a></p>
+                <p><a href="mailto:redan.ganim@e.braude.ac.il">redan.ganim@e.braude.ac.il</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
+                        aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 OptiVision. All rights reserved.</p>
+        </div>
+    </footer>
+    <!-- Include Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

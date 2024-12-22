@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiVision - Contrast Vision Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='ContrastVisionTest.css') }}">
+</head>
+<body>
+    <div class="page-container">
+        <div class="content-container">
+            <!-- Title and Instructions -->
+            <h1 id="title">Instructions!</h1>
+            <p id="instructions">
+                I) Make sure to turn your brightness all the way up! <br>
+                II) Keep both eyes open!<br>
+                III) Keep your head in a distance of 30-35 cm from the screen<br>
+                <b>IV) Identify which side has the lighter pattern!</b><br><br>
+            </p>
+
+            <!-- Start Button -->
+            <div id="test-controls" style="display: block;">
+                <button id="okButton">Ok</button>
+            </div>
+
+            <!-- Test Area -->
+            <div id="test-area" style="display: none;">
+                <div id="contrast-pattern"></div>
+                <div id="options-container" class="option-buttons"></div>
+                <p id="feedback"></p>
+                <button id="GoBack">GoBack</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Made by Tameer and Redan.
+    </div>
+    <script src="{{ url_for('static', filename='ContrastVisionTest.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiVision - Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- FontAwesome for Dark/Light Mode Icon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Dark/Light Mode Toggle Button with Icon -->
+    <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">
+        <i class="fas fa-moon" id="theme-icon"></i> <!-- Moon icon for dark mode -->
+    </button>
+    <div class="page-wrapper">
+        <div class="container">
+            <form action="{{ url_for('register_process') }}" method="post">
+                <h1>Register</h1>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <input type="text" name="name" placeholder="Name*" required>
+                <input type="email" name="email" placeholder="Email*" required>
+                <input type="password" name="password" placeholder="Password*" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password*" required>
+                <button type="submit">Register</button>
+                <a href="{{ url_for('login') }}">Back to Login</a>
+            </form>
+        </div>
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <h3>About OptiVision</h3>
+                    <p>OptiVision provides advanced tools to help you maintain your vision health. Empowering you with
+                        personalized care and early detection.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <p>If you have any questions or inquiries, feel free to reach out to us:</p>
+                    <p>Owners: <a href="mailto:tameer.amer@e.braude.ac.il">tameer.amer@e.braude.ac.il</a></p>
+                    <p><a href="mailto:redan.ganim@e.braude.ac.il">redan.ganim@e.braude.ac.il</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
+                            aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer"
+                            aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
+                            aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"
+                            aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 OptiVision. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

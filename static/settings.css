@@ -1,0 +1,262 @@
+/* General Body and Container Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9fafc;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+body.dark-mode {
+    background-color: #2e3440;
+    color: #e5e5e5;
+}
+
+.settings-container {
+    margin-left: 260px; /* Matches the sidebar width */
+    padding: 20px;
+}
+
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #2563eb;
+    margin-bottom: 20px;
+}
+
+body.dark-mode h1 {
+    color: #81a1c1;
+    /* Light blue for heading in dark mode */
+}
+
+/* Section Styles */
+section {
+    margin-bottom: 30px;
+}
+
+
+/* Form Styles */
+form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+body.dark-mode label {
+    color: #e5e5e5;
+    /* Lighter text for labels */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="file"],
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9fafc;
+    transition: border-color 0.3s ease;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode select {
+    background-color: #434c5e;
+    /* Dark background for inputs */
+    color: #e5e5e5;
+    /* Light text for inputs */
+    border: 1px solid #4c566a;
+    /* Darker border */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus {
+    border-color: #2563eb;
+    outline: none;
+}
+
+body.dark-mode input[type="text"]:focus,
+body.dark-mode input[type="email"]:focus,
+body.dark-mode input[type="password"]:focus,
+body.dark-mode select:focus {
+    border-color: #81a1c1;
+    /* Lighter blue for dark mode focus */
+}
+
+/* Buttons */
+button {
+    background-color: #2563eb;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode button {
+    background-color: #81a1c1;
+    /* Lighter button color for dark mode */
+    color: #2e3440;
+    /* Darker text for dark mode buttons */
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+body.dark-mode button:hover {
+    background-color: #5e81ac;
+    /* Darker shade on hover for dark mode */
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Button Customization */
+.btn-save,
+.btn-change-password,
+.btn-save-preferences {
+    width: 100%;
+}
+
+.danger-actions button {
+    background-color: #e11d48;
+    color: white;
+    width: 100%;
+}
+
+.danger-actions button:hover {
+    background-color: #9f1239;
+}
+
+body.dark-mode .danger-actions button {
+    background-color: #bf616a;
+    /* Red button for danger in dark mode */
+}
+
+body.dark-mode .danger-actions button:hover {
+    background-color: #d08770;
+    /* Hover effect for danger button */
+}
+
+/* Theme Options */
+.theme-options label {
+    margin-bottom: 10px;
+}
+
+.theme-options input[type="radio"] {
+    margin-right: 10px;
+}
+
+.notification-options label {
+    margin-bottom: 10px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 15px;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Theme Toggle Button */
+#theme-toggle {
+    position: fixed; /* Fix the button in place */
+    top: 20px; /* Position it from the top */
+    right: 20px; /* Position it on the right side */
+    background-color: transparent;
+    border: none;
+    color: #333; /* Default color for the icon */
+    font-size: 24px; /* Icon size */
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 1100; /* Ensure it stays on top of other elements */
+}
+
+body.dark-mode #theme-toggle {
+    color: #e5e9f0; /* Light icon color in dark mode */
+}
+
+.sidebar {
+    width: 260px; /* Sidebar width */
+    background-color: #1f2937;
+    color: white;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Fixes the sidebar on the left */
+    top: 0; /* Aligns it to the top */
+    left: 0; /* Aligns it to the left */
+    height: 100%; /* Full-height sidebar */
+    z-index: 1000; /* Ensures it stays above other content */
+}
+
+.sidebar .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar .menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar .menu ul li {
+    margin: 15px 0;
+}
+
+.sidebar .menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sidebar .menu ul li a.active,
+.sidebar .menu ul li a:hover {
+    background-color: #2563eb;
+    border-radius: 8px;
+}
+
+body.dark-mode .sidebar {
+    background-color: #3b4252;
+}
+
+body.dark-mode .sidebar .menu ul li a {
+    color: #e5e5e5;
+}
+
+body.dark-mode .sidebar .menu ul li a.active,
+body.dark-mode .sidebar .menu ul li a:hover {
+    background-color: #4c566a;
+} 

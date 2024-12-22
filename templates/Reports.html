@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiVision - Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='reports.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>OptiVision</h2>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="{{ url_for('TestsSection') }}"><i class="fas fa-tasks"></i> Tests</a></li>
+                    <li><a href="{{ url_for('reports') }}" class="active"><i class="fas fa-file-alt"></i> Reports</a>
+                    </li>
+                    <li><a href="{{ url_for('settings') }}"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="reports-header">
+                <h1>Test Reports</h1>
+                <div class="filter-section">
+                    <select id="date-filter">
+                        <option value="last-week">Last Week</option>
+                        <option value="last-month">Last Month</option>
+                        <option value="last-quarter">Last Quarter</option>
+                    </select>
+                    <select id="test-type-filter">
+                        <option value="all">All Tests</option>
+                        {% for test_type in available_test_types %}
+                        <option value="{{ test_type }}">{{ test_type }}</option>
+                        {% endfor %}
+                    </select>
+                    <button id="theme-toggle">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <section class="reports-summary">
+                <div class="summary-card total-tests">
+                    <h3>Total Tests</h3>
+                    <p>{{ total_tests }}</p>
+                </div>
+                <div class="summary-card average-score">
+                    <h3>Average Score</h3>
+                    <p>{{ average_test_score }}%</p>
+                </div>
+                <div class="summary-card top-performer">
+                    <h3>Top Performer</h3>
+                    <p>{{ top_performer_name }}</p>
+                </div>
+            </section>
+
+            <section class="detailed-reports">
+                <table class="reports-table">
+                    <thead>
+                        <tr>
+                            <th>Test Name</th>
+                            <th>Date</th>
+                            <th>Score</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in test_reports %}
+                        <tr>
+                            <td>{{ report.name }}</td>
+                            <td>{{ report.date }}</td>
+                            <td>{{ report.score }}%</td>
+                            <td class="status-{{ report.status|lower }}">{{ report.status }}</td>
+                            <td>
+                                <a href="{{ url_for('view_report', report_id=report.id) }}" class="btn-view">View
+                                    Details</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="report-charts">
+                <div class="performance-chart">
+                    <canvas id="performance-trend"></canvas>
+                </div>
+            </section>
+
+
+        </main>
+    </div>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About OptiVision</h3>
+                <p>OptiVision provides advanced tools to help you maintain your vision health. Empowering you with
+                    personalized care and early detection.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <p>If you have any questions or inquiries, feel free to reach out to us:</p>
+                <p>Owners: <a href="mailto:tameer.amer@e.braude.ac.il">tameer.amer@e.braude.ac.il</a></p>
+                <p><a href="mailto:redan.ganim@e.braude.ac.il">redan.ganim@e.braude.ac.il</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
+                        aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 OptiVision. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

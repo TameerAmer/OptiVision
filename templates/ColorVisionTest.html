@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiVision - Color Blindness Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='ColorVisionTest.css') }}">
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="content-container">
+            <!-- Title and Instructions -->
+            <h1 id="title">Instructions!</h1>
+            <p id="instructions">
+                I) Make sure to turn your brightness all the way up! <br>
+                II) Keep both eyes open!<br>
+                III)Keep your head in a distance of 30-35 cm from the screen<br>
+                <b>IV) Which letter is hidden? Select it!</b></b><br><br>
+            </p>
+
+            <!-- Start Button -->
+            <div id="test-controls" style="display: block;">
+                <button id="okButton">Ok</button>
+            </div>
+
+            <!-- Test Area -->
+            <div id="test-area" style="display: none;">
+                <img id="test-image" src="" alt="Color Vision Test Image" class="test-image">
+                <div id="options-container" class="option-buttons"></div>
+                <button id="next-button" style="display: none;" onclick="loadNextQuestion()">Next</button>
+                <p id="feedback"></p>
+                <button id="GoBack">GoBack</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Made by Tameer and Redan.
+    </div>
+
+    <script>
+        // Test data
+        const testData = [
+            { file: "{{ url_for('static', filename='images/A.jpg') }}", options: ["A", "B", "C", "None"], answer: "A" },
+            { file: "{{ url_for('static', filename='images/H.jpg') }}", options: ["H", "M", "F", "None"], answer: "H" },
+            { file: "{{ url_for('static', filename='images/C.jpg') }}", options: ["O", "C", "D", "None"], answer: "C" },
+            { file: "{{ url_for('static', filename='images/fake.jpg') }}", options: ["C", "A", "G", "None"], answer: "None" },
+            { file: "{{ url_for('static', filename='images/B.jpg') }}", options: ["K", "L", "B", "None"], answer: "B" },
+            { file: "{{ url_for('static', filename='images/K.jpg') }}", options: ["U", "P", "K", "None"], answer: "K" },
+            { file: "{{ url_for('static', filename='images/D.jpg') }}", options: ["A", "D", "Y", "None"], answer: "D" }
+        ];
+    </script>
+
+    <script src="{{ url_for('static', filename='ColorvisionTest.js') }}"></script>
+</body>
+
+</html>

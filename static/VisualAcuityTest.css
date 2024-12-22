@@ -1,0 +1,145 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    color: #333;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #444;
+    text-align: center;
+}
+
+p {
+    margin-top: 0;
+    font-size: 1rem;
+    color: #666;
+    text-align: center;
+    max-width: 600px;
+}
+
+svg.littleCircle {
+    display: block;
+    margin: auto;
+    height: 20vh;
+}
+
+svg.part {
+    fill: transparent;
+}
+
+path {
+    transition: fill 0.3s ease;
+}
+
+path:hover {
+    fill: rgba(0, 0, 0, 0.7);
+}
+
+path:focus {
+    outline: none;
+}
+
+#error-message {
+    color: #000000;
+    font-size: 1rem;
+    margin-top: 20px;
+}
+
+#current-level,
+#current-eye {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.content-container {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: #999;
+}
+
+#okButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#okButton:hover {
+    background-color: #4cae4c;
+}
+
+#cover-eye-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #FFFFFF;
+    padding: 40px 60px;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    text-align: center;
+    transition: opacity 0.5s ease;
+    z-index: 9999;
+}
+
+#cover-eye-message .popup-content p {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+#ok-button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    outline: none;
+}
+
+#ok-button:hover {
+    background-color: #45a049;
+}
+
+#ok-button:active {
+    background-color: #3d8b40;
+    transform: scale(0.95);
+}
+
+#instructions {
+    font-size: 20px;
+    text-align: center;
+    line-height: 1.8;
+    /* Adjust vertical spacing */
+    margin: 20px auto;
+    /* Ensure horizontal centering */
+    max-width: 600px;
+    /* Restrict width for better readability */
+}

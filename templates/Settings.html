@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>OptiVision - Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='settings.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <h2>OptiVision</h2>
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('TestsSection') }}"><i class="fas fa-tasks"></i> Tests</a></li>
+                <li><a href="{{ url_for('reports') }}"><i class="fas fa-file-alt"></i> Reports</a></li>
+                <li><a href="{{ url_for('settings') }}" class="active"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="settings-container">
+        <h1>Account Settings</h1>
+        <button id="theme-toggle">
+            <i class="fas fa-moon" id="theme-icon"></i> <!-- Moon icon for dark mode -->
+        </button>
+        <section class="profile-settings">
+            <h2>Profile Information</h2>
+            <form id="profile-form" method="POST" action="{{ url_for('settings') }}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="{{ user_name or ''}}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" value="{{ user_email or ''}}" required>
+                </div>
+                <button type="submit" class="btn-save">Save Profile</button>
+            </form>
+        </section>
+
+        <section class="security-settings">
+            <h2>Security</h2>
+            <form id="security-form" method="POST" action="{{ url_for('settings') }}">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" name="current_password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" name="new_password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm New Password</label>
+                    <input type="password" id="confirm-password" name="confirm_password">
+                </div>
+                <button type="submit" class="btn-change-password">Change Password</button>
+            </form>
+        </section>
+
+        <section class="danger-zone">
+            <h2>Danger Zone</h2>
+            <div class="danger-actions">
+                <button id="delete-account" class="btn-delete-account">
+                    Delete Account
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='settings.js') }}"></script>
+</body>
+
+</html>
