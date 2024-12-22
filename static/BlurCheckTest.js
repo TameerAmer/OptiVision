@@ -4,30 +4,30 @@ let incorrectAnswers = 0;
 let feedBack = "";
 let testStarted = false;
 const MAX_LEVELS = 5;
-let currentNumber = '';
+let currentNumber = "";
 
-document.addEventListener('DOMContentLoaded', function() {
-    const okButton = document.getElementById('okButton');
-    const testArea = document.getElementById('test-area');
-    const testControls = document.getElementById('test-controls');
-    const goBackButton = document.getElementById('GoBack');
-    const blurText = document.getElementById('blur-text');
+document.addEventListener("DOMContentLoaded", function () {
+  const okButton = document.getElementById("okButton");
+  const testArea = document.getElementById("test-area");
+  const testControls = document.getElementById("test-controls");
+  const goBackButton = document.getElementById("GoBack");
+  const blurText = document.getElementById("blur-text");
 
-    function createNavigationConfirmationModal() {
-        const modal = document.createElement("div");
-        modal.id = "navigation-confirmation-modal";
-        modal.style.position = "fixed";
-        modal.style.top = "0";
-        modal.style.left = "0";
-        modal.style.width = "100%";
-        modal.style.height = "100%";
-        modal.style.backgroundColor = "rgba(0,0,0,0.5)";
-        modal.style.display = "flex";
-        modal.style.justifyContent = "center";
-        modal.style.alignItems = "center";
-        modal.style.zIndex = "1000";
+  function createNavigationConfirmationModal() {
+    const modal = document.createElement("div");
+    modal.id = "navigation-confirmation-modal";
+    modal.style.position = "fixed";
+    modal.style.top = "0";
+    modal.style.left = "0";
+    modal.style.width = "100%";
+    modal.style.height = "100%";
+    modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+    modal.style.display = "flex";
+    modal.style.justifyContent = "center";
+    modal.style.alignItems = "center";
+    modal.style.zIndex = "1000";
 
-        modal.innerHTML = `
+    modal.innerHTML = `
             <div style="background-color: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 300px;">
                 <h2>Are you sure?</h2>
                 <p>If you leave now, your current test progress will be lost.</p>
@@ -37,53 +37,56 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        return modal;
+    return modal;
+  }
+
+  okButton.addEventListener("click", function () {
+    testControls.style.display = "none";
+    testArea.style.display = "block";
+    document.getElementById("title").textContent = "Blur Check Test";
+    startTest();
+    testStarted = true;
+    window.addEventListener("beforeunload", confirmNavigation);
+  });
+
+  goBackButton.addEventListener("click", function () {
+    if (testStarted) {
+      const modal = createNavigationConfirmationModal();
+      document.body.appendChild(modal);
+
+      document
+        .getElementById("confirm-navigation")
+        .addEventListener("click", () => {
+          window.removeEventListener("beforeunload", confirmNavigation);
+          window.location.href = "allTests";
+        });
+
+      document
+        .getElementById("cancel-navigation")
+        .addEventListener("click", () => {
+          document.body.removeChild(modal);
+        });
+    } else {
+      window.location.href = "allTests";
     }
+  });
 
-    okButton.addEventListener('click', function() {
-        testControls.style.display = 'none';
-        testArea.style.display = 'block';
-        document.getElementById('instructions').style.display = 'none';
-        document.getElementById('title').textContent = 'Blur Check Test';
-        startTest();
-        testStarted = true;
-        window.addEventListener('beforeunload', confirmNavigation);
-    });
-
-    goBackButton.addEventListener('click', function() {
-        if (testStarted) {
-            const modal = createNavigationConfirmationModal();
-            document.body.appendChild(modal);
-
-            document.getElementById('confirm-navigation').addEventListener('click', () => {
-                window.removeEventListener('beforeunload', confirmNavigation);
-                window.location.href = 'allTests';
-            });
-
-            document.getElementById('cancel-navigation').addEventListener('click', () => {
-                document.body.removeChild(modal);
-            });
-        } else {
-            window.location.href = 'allTests';
-        }
-    });
-
-    function confirmNavigation(event) {
-        if (testStarted) {
-            event.preventDefault();
-            event.returnValue = '';
-        }
+  function confirmNavigation(event) {
+    if (testStarted) {
+      event.preventDefault();
+      event.returnValue = "";
     }
+  }
 
-    function generateRandomNumber() {
-      return Math.floor(Math.random() * 900) + 100; // 3-digit number
+  function generateRandomNumber() {
+    return Math.floor(Math.random() * 900) + 100; // 3-digit number
   }
 
   function showBlurText() {
-      currentNumber = generateRandomNumber().toString();
-      const blurAmount = currentLevel * 0.8;
+    currentNumber = generateRandomNumber().toString();
+    const blurAmount = currentLevel * 0.8;
 
-      blurText.innerHTML = `
+    blurText.innerHTML = `
           <div style="text-align: center;">
               <p style="font-size: 48px; filter: blur(${blurAmount}px); margin: 20px 0; font-family: monospace;">
                   ${currentNumber}
@@ -94,112 +97,139 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
       `;
 
-      document.getElementById('userInput').focus();
-      document.getElementById('userInput').addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-              checkAnswer();
-          }
+    document.getElementById("userInput").focus();
+    document
+      .getElementById("userInput")
+      .addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          checkAnswer();
+        }
       });
   }
 
   function startTest() {
-      showBlurText();
+    showBlurText();
   }
 
-  window.checkAnswer = function() {
-      const userInput = document.getElementById('userInput').value;
-      const correctAnswer = currentNumber;
+  window.checkAnswer = function () {
+    const userInput = document.getElementById("userInput").value;
+    const correctAnswer = currentNumber;
 
-      if (userInput === correctAnswer) {
-          // Show success message
-          const successMsg = document.createElement('p');
-          successMsg.style.color = 'green';
-          successMsg.textContent = 'Correct!';
-          document.getElementById('userInput').parentNode.appendChild(successMsg);
-          
-          // Increment score
-          score++;
-          
-          // Move to next number after delay
-          setTimeout(() => {
-              currentLevel++;
-              showBlurText();
-          }, 1000);
-      } else {
-          // Just show the next number without incrementing score
-          currentLevel++;
-          showBlurText();
-      }
+    if (userInput === correctAnswer) {
+      // Show success message
+      const successMsg = document.createElement("p");
+      successMsg.style.color = "green";
+      successMsg.textContent = "Correct!";
+      document.getElementById("userInput").parentNode.appendChild(successMsg);
 
-      // Check if test should end
-      if (currentLevel > MAX_LEVELS) {
-          completeTest();
-      }
-  };
+      // Increment score
+      score++;
 
-    function determineFeedback(finalScore) {
-        if (finalScore >= 4) {
-            feedBack = "Excellent vision clarity! Your ability to see blurred numbers is very good.";
-            return feedBack;
-        }
-        if (finalScore >= 3) {
-            feedBack = "Good vision clarity. Regular check-ups recommended.";
-            return feedBack;
-        }
-        if (finalScore >= 2) {
-            feedBack = "Moderate vision clarity. Consider consulting an eye care professional.";
-            return feedBack;
-        }
-        feedBack = "You might be experiencing vision clarity issues. Please consult an eye care professional.";
-        return feedBack;
+      // Move to next number after delay
+      setTimeout(() => {
+        currentLevel++;
+        showBlurText();
+      }, 1000);
+    } else {
+      // Just show the next number without incrementing score
+      currentLevel++;
+      showBlurText();
     }
 
-    function completeTest() {
-        const feedbackMsg = determineFeedback(score);
-        testArea.innerHTML = `
+    // Check if test should end
+    if (currentLevel > MAX_LEVELS) {
+      completeTest();
+    }
+  };
+
+  function determineFeedback(finalScore) {
+    if (finalScore >= 4) {
+      feedBack =
+        "Excellent vision clarity! Your ability to see blurred numbers is very good.";
+      return feedBack;
+    }
+    if (finalScore >= 3) {
+      feedBack = "Good vision clarity. Regular check-ups recommended.";
+      return feedBack;
+    }
+    if (finalScore >= 2) {
+      feedBack =
+        "Moderate vision clarity. Consider consulting an eye care professional.";
+      return feedBack;
+    }
+    feedBack =
+      "You might be experiencing vision clarity issues. Please consult an eye care professional.";
+    return feedBack;
+  }
+
+  function completeTest() {
+    document.getElementById("instructions").style.display = "none";
+    const feedbackMsg = determineFeedback(score);
+    testArea.innerHTML = `
+            <style>
+                #okButton, #ok-button {
+                    margin-top: 20px;
+                    padding: 10px 20px;
+                    background-color: #5cb85c;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                }
+    
+                #okButton:hover, #ok-button:hover {
+                    background-color: #4cae4c;
+                }
+    
+                #okButton:active, #ok-button:active {
+                    background-color: #3d8b40;
+                    transform: scale(0.95);
+                }
+            </style>
             <div style="text-align: center;">
                 <h2>Test Complete!</h2>
                 <p>Your score: ${score}/${MAX_LEVELS}</p>
                 <p>${feedbackMsg}</p>
-                <button onclick="saveAndReturn()" style="margin-top: 20px;">OK</button>
+                <button id="okButton" onclick="saveAndReturn()">OK</button>
             </div>
         `;
-    }
+  }
 
-    window.saveAndReturn = function() {
-        window.removeEventListener('beforeunload', confirmNavigation);
-        
-        testArea.innerHTML = `
+  window.saveAndReturn = function () {
+    window.removeEventListener("beforeunload", confirmNavigation);
+
+    testArea.innerHTML = `
             <div style="text-align: center;">
                 <h2>Saving results...</h2>
             </div>
         `;
 
-        saveResults();
-        
-        setTimeout(() => {
-            window.location.href = 'allTests';
-        }, 2000);
-    };
+    saveResults();
 
-    function saveResults() {
-        fetch('/Blur_Check_save_results', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                score: score,
-                incorrectAnswers: incorrectAnswers,
-                feedback: feedBack
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (!data.success) {
-                console.error('Failed to save results');
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
+    setTimeout(() => {
+      window.location.href = "allTests";
+    }, 2000);
+  };
+
+  function saveResults() {
+    fetch("/Blur_Check_save_results", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        score: score,
+        incorrectAnswers: incorrectAnswers,
+        feedback: feedBack,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data.success) {
+          console.error("Failed to save results");
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  }
 });
