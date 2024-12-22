@@ -342,3 +342,19 @@ body.dark-mode .footer-bottom {
 body.dark-mode #theme-toggle {
     color: #e5e9f0;
 }
+
+body.dark-mode .reports-header h1{
+    color: #e5e9f0;
+}
+
+body.dark-mode #date-filter{
+    color: #e5e9f0;
+    background-color: #4c566a;
+}
+
+body.dark-mode .filter-section select{
+    color: #e5e9f0;
+    background-color: #4c566a;
+}
+    
+
