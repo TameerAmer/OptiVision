@@ -409,7 +409,7 @@ class PDF(FPDF):
 
 @app.route('/download_pdf/<int:test_id>/<test_name>')
 def download_pdf(test_id, test_name):
-    decoded_test_name = unquote(test_name)  # Decode URL-encoded test_name
+    decoded_test_name = test_name.replace('_', ' ')  # Replace underscores with spaces
     print(f"Received test_id: {test_id}, test_name: {decoded_test_name}")
     
     # Fetch test details

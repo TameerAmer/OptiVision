@@ -87,7 +87,7 @@
                             <td>{{ report.score_display }}</td>
                             <td class="status-{{ report.status|lower }}">{{ report.status }}</td>
                             <td class="actions">
-                                <a href="{{ url_for('download_pdf', test_id=report.id, test_name=report.test_name) }}"
+                                <a href="{{ url_for('download_pdf', test_id=report.id, test_name=report.test_name.replace(' ', '_')) }}"
                                     class="btn-view">
                                     <i class="fas fa-download"></i> Download PDF
                                 </a>
