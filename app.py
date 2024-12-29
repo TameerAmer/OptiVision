@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from DB_connection import ConnectDatabase
 from fpdf import FPDF
 import os
-from urllib.parse import unquote
 from pathlib import Path
+from io import BytesIO
 
 app = Flask(__name__)
 app.secret_key = 'OptiVision_Tameer_Redan'  
@@ -409,6 +409,7 @@ class PDF(FPDF):
 
 @app.route('/download_pdf/<int:test_id>/<test_name>')
 def download_pdf(test_id, test_name):
+    from urllib.parse import unquote
     decoded_test_name = test_name.replace('_', ' ')  # Replace underscores with spaces
     print(f"Received test_id: {test_id}, test_name: {decoded_test_name}")
     
@@ -488,12 +489,18 @@ def download_pdf(test_id, test_name):
         "5. Maintain a balanced diet with eye-healthy nutrients.\n"
     )
 
-    downloads_path = str(Path.home() / "Downloads")  # Get the Downloads folder path
-    file_path = os.path.join(downloads_path, f"Test_Report_{test_id}.pdf")
-    pdf.output(file_path)
+        # Generate PDF in memory
+    pdf_buffer = BytesIO()
+    pdf.output(pdf_buffer)
+    pdf_buffer.seek(0)
 
     # Serve the file for download
-    return send_file(file_path, as_attachment=True, download_name=f"Test_Report_{test_id}.pdf")
+    return send_file(
+        pdf_buffer,
+        as_attachment=True,
+        download_name=f"Test_Report_{test_id}.pdf",
+        mimetype="application/pdf"
+    )
 
 
 
