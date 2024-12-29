@@ -411,11 +411,8 @@ class PDF(FPDF):
 def download_pdf(test_id, test_name):
     from urllib.parse import unquote
     decoded_test_name = unquote(test_name)  # Decode test name
-    print(f"Received test_id: {test_id}, test_name: {decoded_test_name}")
-    
     # Fetch test details
     test_report = db.get_test_report_by_id(test_id, decoded_test_name)
-    print(f"Fetched test report: {test_report}")  # Debug print to verify data
     if not test_report:
         return render_template("error.html", message="The requested test report was not found.")
 
