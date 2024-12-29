@@ -3,7 +3,6 @@ from DB_connection import ConnectDatabase
 from fpdf import FPDF
 import os
 from pathlib import Path
-from io import BytesIO
 
 app = Flask(__name__)
 app.secret_key = 'OptiVision_Tameer_Redan'  
@@ -410,20 +409,19 @@ class PDF(FPDF):
 @app.route('/download_pdf/<int:test_id>/<test_name>')
 def download_pdf(test_id, test_name):
     from urllib.parse import unquote
-    decoded_test_name = test_name.replace('_', ' ')  # Replace underscores with spaces
+    decoded_test_name = unquote(test_name.replace('_', ' '))  # Decode URL-encoded test_name
     print(f"Received test_id: {test_id}, test_name: {decoded_test_name}")
-    
+
     # Fetch test details
     test_report = db.get_test_report_by_id(test_id, decoded_test_name)
     if not test_report:
         return render_template("error.html", message="The requested test report was not found.")
 
-
     # Create a PDF
     pdf = PDF()
     pdf.add_page()
 
-    # Test Name and Date
+    # Add content to PDF
     pdf.set_font("Arial", style="B", size=12)
     pdf.cell(0, 10, "Test Details:", ln=True)
     pdf.set_font("Arial", size=11)
@@ -431,77 +429,20 @@ def download_pdf(test_id, test_name):
     pdf.cell(0, 10, f"Test Date: {test_report['test_date']}", ln=True)
     pdf.ln(10)
 
-    # Add Score in a Table
+    # Example: Score Table
     pdf.set_font("Arial", style="B", size=12)
     pdf.set_fill_color(0, 51, 102)  # Dark blue background
     pdf.set_text_color(255, 255, 255)  # White text
-    pdf.cell(80, 10, "Eye", border=1, align="C", fill=True)
     pdf.cell(80, 10, "Score", border=1, align="C", fill=True)
-    pdf.ln()
-
-    pdf.set_text_color(0, 0, 0)  # Reset text color for rows
-    pdf.set_font("Arial", size=11)
-
-    if test_report["test_name"] == "Visual Acuity":
-        # Display left eye scores
-        pdf.cell(80, 10, "Left Eye", border=1)
-        pdf.cell(80, 10, f"{test_report.get('left_eye_max_level', 'N/A')} / 17", border=1)
-        pdf.ln()
-
-        # Display left eye incorrect answers
-        pdf.cell(80, 10, "Left Eye Incorrect", border=1)
-        pdf.cell(80, 10, f"{test_report.get('left_eye_incorrect', 'N/A')}", border=1)
-        pdf.ln()
-
-        # Display right eye scores
-        pdf.cell(80, 10, "Right Eye", border=1)
-        pdf.cell(80, 10, f"{test_report.get('right_eye_max_level', 'N/A')} / 17", border=1)
-        pdf.ln()
-
-        # Display right eye incorrect answers
-        pdf.cell(80, 10, "Right Eye Incorrect", border=1)
-        pdf.cell(80, 10, f"{test_report.get('right_eye_incorrect', 'N/A')}", border=1)
-        pdf.ln()
-    else:
-        # General test score
-        pdf.cell(80, 10, "Overall Score", border=1)
-        pdf.cell(80, 10, f"{test_report['obtained_score']} / {test_report['total_tests']}", border=1)
-        pdf.ln()
-
+    pdf.cell(80, 10, f"{test_report['obtained_score']} / {test_report['total_tests']}", border=1)
     pdf.ln(10)
 
-    # Feedback Section
-    pdf.set_font("Arial", style="B", size=12)
-    pdf.cell(0, 10, "Feedback:", ln=True)
-    pdf.set_font("Arial", size=11)
-    pdf.multi_cell(0, 10, test_report["feedback"])
-    pdf.ln(10)
-
-    # Add Recommendations Section
-    pdf.set_font("Arial", style="B", size=12)
-    pdf.cell(0, 10, "Our Recommendations:", ln=True)
-    pdf.set_font("Arial", size=11)
-    pdf.multi_cell(0, 10, 
-        "1. Take regular breaks during screen time.\n"
-        "2. Ensure adequate lighting when reading or working.\n"
-        "3. Follow up with an eye care professional if issues persist.\n"
-        "4. Keep your eyewear prescription up to date.\n"
-        "5. Maintain a balanced diet with eye-healthy nutrients.\n"
-    )
-
-        # Generate PDF in memory
-    pdf_buffer = BytesIO()
-    pdf.output(pdf_buffer)
-    pdf_buffer.seek(0)
+    # Save to Vercel's temporary directory
+    file_path = f"/tmp/Test_Report_{test_id}.pdf"
+    pdf.output(file_path)
 
     # Serve the file for download
-    return send_file(
-        pdf_buffer,
-        as_attachment=True,
-        download_name=f"Test_Report_{test_id}.pdf",
-        mimetype="application/pdf"
-    )
-
+    return send_file(file_path, as_attachment=True, download_name=f"Test_Report_{test_id}.pdf")
 
 
 if __name__ == '__main__':
