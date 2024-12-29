@@ -274,9 +274,63 @@ def TestsSection():
 def reports():
     if 'user_name' not in session:
         return redirect(url_for('login'))
-    response = make_response(render_template('Reports.html'))
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, proxy-revalidate'
-    return response
+
+    user_id = session['user_id']
+
+    # Fetch aggregated test reports
+    test_reports = db.get_test_reports(user_id)
+
+    # Fetch available test types dynamically
+    available_test_types = ["Blur Check", "Color Vision", "Contrast Vision", "Visual Acuity", "Watch Dot"]
+
+    # Compute summary statistics
+    total_tests = len(test_reports)
+    average_test_score = (
+        sum((report['obtained_score'] / report['total_tests']) * 100 
+            for report in test_reports if report['obtained_score'] is not None and report['total_tests'] > 0) / total_tests
+    ) if total_tests > 0 else 0
+
+    # Prepare performance data for visualization
+    performance_data = [
+        {
+            "date": report["test_date"],
+            "test_name": report["test_name"],
+            "score_percentage": (report["obtained_score"] / report["total_tests"]) * 100
+        }
+        for report in test_reports
+        if report['obtained_score'] is not None and report['total_tests'] > 0
+    ]   
+    eye_health_status = (
+        "Your vision health is excellent."
+        if average_test_score >= 90 else
+        "Strong vision with minor concerns."
+        if average_test_score >= 70 else
+        "Vision health requires improvement."
+    ) if total_tests > 0 else "Complete tests for assessment."
+
+    return render_template(
+        'Reports.html',
+        test_reports=test_reports,
+        available_test_types=available_test_types,
+        total_tests=total_tests,
+        average_test_score=round(average_test_score, 2) if total_tests > 0 else "N/A",
+        performance_data=performance_data, # Pass performance data to the template
+        eye_health_status=eye_health_status
+    )
+
+
+@app.route('/view_report/<int:report_id>')
+def view_report(report_id):
+    if 'user_name' not in session:
+        return redirect(url_for('login'))
+
+    # Fetch report details based on report_id
+    report_details = db.get_report_details(report_id)
+
+    if not report_details:
+        return "Report not found", 404
+
+    return render_template('view_report.html', report=report_details)
 
 @app.route('/settings')
 def settings():

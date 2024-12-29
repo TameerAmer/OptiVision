@@ -11,6 +11,9 @@
 </head>
 
 <body>
+    <script id="performance-data" type="application/json">
+        {{ performance_data|tojson }}
+    </script>    
     <div class="dashboard">
         <aside class="sidebar">
             <div class="logo">
@@ -20,8 +23,7 @@
                 <ul>
                     <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a></li>
                     <li><a href="{{ url_for('TestsSection') }}"><i class="fas fa-tasks"></i> Tests</a></li>
-                    <li><a href="{{ url_for('reports') }}" class="active"><i class="fas fa-file-alt"></i> Reports</a>
-                    </li>
+                    <li><a href="{{ url_for('reports') }}" class="active"><i class="fas fa-file-alt"></i> Reports</a></li>
                     <li><a href="{{ url_for('settings') }}"><i class="fas fa-cog"></i> Settings</a></li>
                     <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
@@ -58,10 +60,11 @@
                     <h3>Average Score</h3>
                     <p>{{ average_test_score }}%</p>
                 </div>
-                <div class="summary-card top-performer">
-                    <h3>Top Performer</h3>
-                    <p>{{ top_performer_name }}</p>
+                <div class="summary-card eye-health">
+                    <h3>Eye Health Status</h3>
+                    <p>{{ eye_health_status }}</p>
                 </div>
+                
             </section>
 
             <section class="detailed-reports">
@@ -70,7 +73,7 @@
                         <tr>
                             <th>Test Name</th>
                             <th>Date</th>
-                            <th>Score</th>
+                            <th>Score(Right,Left)</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -78,13 +81,12 @@
                     <tbody>
                         {% for report in test_reports %}
                         <tr>
-                            <td>{{ report.name }}</td>
-                            <td>{{ report.date }}</td>
-                            <td>{{ report.score }}%</td>
+                            <td>{{ report.test_name }}</td>
+                            <td>{{ report.test_date }}</td>
+                            <td>{{ report.score_display }}</td>
                             <td class="status-{{ report.status|lower }}">{{ report.status }}</td>
                             <td>
-                                <a href="{{ url_for('view_report', report_id=report.id) }}" class="btn-view">View
-                                    Details</a>
+                                <a href="{{ url_for('view_report', report_id=report.id) }}" class="btn-view">View Details</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -94,10 +96,9 @@
 
             <section class="report-charts">
                 <div class="performance-chart">
-                    <canvas id="performance-trend"></canvas>
+                    <canvas id="performance-chart"></canvas>
                 </div>
             </section>
-
 
         </main>
     </div>
@@ -138,7 +139,7 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='reports.js') }}"></script>
 </body>
 
 </html>

@@ -121,15 +121,13 @@ button {
     transition: background-color 0.3s ease;
 }
 
-/* Center the button container */
 .StartTestButton {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50vh;
-    margin: 0 auto;
-    /* Ensure the container stays centered */
+    margin-top: 10px; /* Small spacing above the button */
     background-color: #f9f9f9;
+    height: 10vh;
 }
 
 body.dark-mode .StartTestButton {
@@ -137,19 +135,16 @@ body.dark-mode .StartTestButton {
 }
 
 .AllTestsButton {
-    background-color: #3b82f6;
-    /* Modern blue primary */
+    background-color: #3b82f6; /* Modern blue primary */
     color: #ffffff;
     border: none;
-    padding: 20px;
+    padding: 15px 30px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    text-decoration: none;
-    /* Ensures no underline appears */
+    text-decoration: none; /* Ensure no underline */
     display: inline-block;
-    /* Keeps it styled like a button */
     text-align: center;
 }
 
@@ -207,7 +202,7 @@ body.dark-mode .topbar {
 }
 
 body.dark-mode .card {
-    background-color: #444;
+    background-color: #3b4252;
     color: #e5e5e5;
 }
 
@@ -331,4 +326,87 @@ body.dark-mode .social-icons a {
 body.dark-mode .footer-bottom {
     background-color: #2e3440;
     color: #e5e5e5;
+}
+
+/* Tips Section */
+.tips {
+    margin: 20px 0; /* Reduce vertical spacing */
+    padding: 20px;
+    background-color: white; /* Default light mode background */
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    text-align: left;
+    transition: transform 0.2s, box-shadow 0.2s; /* Animation for hover */
+}
+
+.tips h2 {
+    font-size: 1.5rem;
+    color: #2563eb; /* Match primary blue color */
+    margin-bottom: 15px;
+    text-align: center; /* Center-align heading */
+}
+
+.tips ul {
+    list-style-type: none; /* Remove default bullets */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+.tips ul li {
+    display: flex; /* Align icon and text */
+    align-items: center;
+    gap: 15px; /* Space between icon and text */
+    background-color: #f9fafc; /* Subtle background for each tip */
+    padding: 12px 15px; /* Add padding */
+    margin-bottom: 10px; /* Space between tips */
+    border-radius: 8px; /* Round corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    transition: transform 0.2s, box-shadow 0.2s; /* Hover effect */
+}
+
+.tips ul li:last-child {
+    margin-bottom: 0; /* Remove bottom margin for the last tip */
+}
+.tips ul li:hover {
+    transform: translateY(-3px); /* Lift on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Enhance shadow */
+}
+
+.tips ul li i {
+    font-size: 1.5rem; /* Icon size */
+    color: #2563eb; /* Match primary blue color */
+}
+
+.tips ul li p {
+    margin: 0;
+    font-size: 1rem; /* Modern readable font size */
+    color: #333; /* Standard dark text color */
+}
+
+/* Dark Mode for Tips Section */
+body.dark-mode .tips {
+    background-color: #3b4252; /* Dark mode background */
+    color: #e5e5e5; /* Light text for dark mode */
+    box-shadow: none; /* Remove shadow for simplicity */
+}
+
+body.dark-mode .tips ul li {
+    background-color: #4c566a; /* Subtle dark background */
+    box-shadow: none; /* Simplified design for dark mode */
+}
+
+body.dark-mode .tips ul li:hover {
+    background-color: #434c5e; /* Slightly darker on hover */
+}
+
+body.dark-mode .tips ul li i {
+    color: #81a1c1; /* Light blue for dark mode */
+}
+
+body.dark-mode .tips ul li p {
+    color: #e5e5e5; /* Light text for dark mode */
+}
+
+body.dark-mode .tips h2 {
+    color: #ccc; 
 }

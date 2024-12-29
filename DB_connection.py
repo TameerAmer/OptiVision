@@ -411,5 +411,94 @@ class ConnectDatabase:
             if connection:
                 connection.close()
 
+    def get_test_reports(self, user_id):
+        connection = self.get_connection()
+        if not connection:
+            return []
+
+        cursor = connection.cursor(dictionary=True)
+        try:
+            query = """
+                SELECT test_id AS id, 'Blur Check' AS test_name, test_date, 
+                    CAST(score AS UNSIGNED) AS obtained_score, 
+                    5 AS total_tests,
+                    CONCAT(score, '/', 5) AS score_display, 
+                    CASE WHEN score >= 3 THEN 'Pass' ELSE 'Fail' END AS status, feedback
+                FROM blur_check WHERE user_id = %s
+                UNION ALL
+                SELECT test_id AS id, 'Color Vision', test_date, 
+                    CAST(correct_answers AS UNSIGNED) AS obtained_score, 
+                    7 AS total_tests,
+                    CONCAT(correct_answers, '/', 7) AS score_display, 
+                    CASE WHEN correct_answers >= 4 THEN 'Pass' ELSE 'Fail' END AS status, feedback
+                FROM color_vision WHERE user_id = %s
+                UNION ALL
+                SELECT test_id AS id, 'Contrast Vision', test_date, 
+                    CAST(score AS UNSIGNED) AS obtained_score, 
+                    17 AS total_tests,
+                    CONCAT(score, '/', 17) AS score_display, 
+                    CASE WHEN score >= 9 THEN 'Pass' ELSE 'Fail' END AS status, feedback
+                FROM contrast_vision WHERE user_id = %s
+                UNION ALL
+                SELECT test_id AS id, 'Visual Acuity', test_date, 
+                    CAST(right_eye_max_level + left_eye_max_level AS UNSIGNED) AS obtained_score, 
+                    34 AS total_tests,
+                    CONCAT(right_eye_max_level, '/17, ', left_eye_max_level, '/17') AS score_display, 
+                    CASE WHEN (right_eye_max_level + left_eye_max_level) >= 18 THEN 'Pass' ELSE 'Fail' END AS status, feedback
+                FROM visual_acuity WHERE user_id = %s
+                UNION ALL
+                SELECT test_id AS id, 'Watch Dot', test_date, 
+                    CAST(score AS UNSIGNED) AS obtained_score, 
+                    20 AS total_tests,
+                    CONCAT(score, '/', 20) AS score_display, 
+                    CASE WHEN score >= 10 THEN 'Pass' ELSE 'Fail' END AS status, feedback
+                FROM watch_dot WHERE user_id = %s
+                ORDER BY test_date DESC;
+            """
+            cursor.execute(query, (user_id, user_id, user_id, user_id, user_id))
+            return cursor.fetchall()
+        except Exception as e:
+            print(f"Error fetching test reports: {e}")
+            return []
+        finally:
+            cursor.close()
+            connection.close()
+
+
+
+
+    def get_report_details(self, report_id):
+        connection = self.get_connection()
+        if not connection:
+            return None
+
+        cursor = connection.cursor(dictionary=True)
+        try:
+            query = """
+                SELECT 'Blur Check' AS test_name, score, feedback, test_date
+                FROM blur_check WHERE test_id = %s
+                UNION ALL
+                SELECT 'Color Vision', correct_answers AS score, feedback, test_date
+                FROM color_vision WHERE test_id = %s
+                UNION ALL
+                SELECT 'Contrast Vision', score, feedback, test_date
+                FROM contrast_vision WHERE test_id = %s
+                UNION ALL
+                SELECT 'Visual Acuity', (right_eye_max_level + left_eye_max_level) / 2 AS score, feedback, test_date
+                FROM visual_acuity WHERE test_id = %s
+                UNION ALL
+                SELECT 'Watch Dot', score, feedback, test_date
+                FROM watch_dot WHERE test_id = %s;
+            """
+            cursor.execute(query, (report_id, report_id, report_id, report_id, report_id))
+            return cursor.fetchone()
+        except Exception as e:
+            print(f"Error fetching report details: {e}")
+            return None
+        finally:
+            cursor.close()
+            connection.close()
+
+
 
 
