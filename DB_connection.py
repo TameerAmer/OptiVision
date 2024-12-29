@@ -500,5 +500,113 @@ class ConnectDatabase:
             connection.close()
 
 
+    def get_test_report_by_id(self, test_id, test_name):
+        connection = None
+        cursor = None
+        try:
+            connection = self.get_connection()
+            if not connection:
+                return None
+
+            cursor = connection.cursor(dictionary=True)
+
+            # Execute the query
+            query = """
+                SELECT 
+                    watch_dot.test_id AS test_id, 
+                    'Watch Dot' AS test_name, 
+                    watch_dot.test_date, 
+                    watch_dot.score AS obtained_score, 
+                    20 AS total_tests, 
+                    NULL AS left_eye_max_level, 
+                    NULL AS right_eye_max_level, 
+                    NULL AS left_eye_incorrect, 
+                    NULL AS right_eye_incorrect, 
+                    watch_dot.feedback
+                FROM watch_dot
+                WHERE watch_dot.test_id = %s AND 'Watch Dot' = %s
+
+                UNION ALL
+
+                SELECT 
+                    blur_check.test_id AS test_id, 
+                    'Blur Check' AS test_name, 
+                    blur_check.test_date, 
+                    blur_check.score AS obtained_score, 
+                    5 AS total_tests, 
+                    NULL AS left_eye_max_level, 
+                    NULL AS right_eye_max_level, 
+                    NULL AS left_eye_incorrect, 
+                    NULL AS right_eye_incorrect, 
+                    blur_check.feedback
+                FROM blur_check
+                WHERE blur_check.test_id = %s AND 'Blur Check' = %s
+
+                UNION ALL
+
+                SELECT 
+                    contrast_vision.test_id AS test_id, 
+                    'Contrast Vision' AS test_name, 
+                    contrast_vision.test_date, 
+                    contrast_vision.score AS obtained_score, 
+                    17 AS total_tests, 
+                    NULL AS left_eye_max_level, 
+                    NULL AS right_eye_max_level, 
+                    NULL AS left_eye_incorrect, 
+                    NULL AS right_eye_incorrect, 
+                    contrast_vision.feedback
+                FROM contrast_vision
+                WHERE contrast_vision.test_id = %s AND 'Contrast Vision' = %s
+
+                UNION ALL
+
+                SELECT 
+                    color_vision.test_id AS test_id, 
+                    'Color Vision' AS test_name, 
+                    color_vision.test_date, 
+                    color_vision.correct_answers AS obtained_score, 
+                    7 AS total_tests, 
+                    NULL AS left_eye_max_level, 
+                    NULL AS right_eye_max_level, 
+                    NULL AS left_eye_incorrect, 
+                    NULL AS right_eye_incorrect, 
+                    color_vision.feedback
+                FROM color_vision
+                WHERE color_vision.test_id = %s AND 'Color Vision' = %s
+
+                UNION ALL
+
+                SELECT 
+                    visual_acuity.test_id AS test_id, 
+                    'Visual Acuity' AS test_name, 
+                    visual_acuity.test_date, 
+                    NULL AS obtained_score, 
+                    34 AS total_tests, 
+                    visual_acuity.left_eye_max_level, 
+                    visual_acuity.right_eye_max_level, 
+                    visual_acuity.left_eye_incorrect, 
+                    visual_acuity.right_eye_incorrect, 
+                    visual_acuity.feedback
+                FROM visual_acuity
+                WHERE visual_acuity.test_id = %s AND 'Visual Acuity' = %s;
+            """
+            
+            cursor.execute(query, (test_id, test_name, test_id, test_name, test_id, test_name, test_id, test_name, test_id, test_name))
+            result = cursor.fetchone()
+            return result if result else None
+
+        except Exception as e:
+            print(f"Error fetching test report by id ({test_id}): {e}")
+            return None
+
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+
+
+
+
 
 
