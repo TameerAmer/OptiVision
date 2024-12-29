@@ -30,7 +30,7 @@
         </button>
         <section class="profile-settings">
             <h2>Profile Information</h2>
-            <form id="profile-form" method="POST" action="{{ url_for('settings') }}">
+            <form id="profile-form" method="POST" action="{{ url_for('update_profile') }}">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" value="{{ user_name or ''}}" required>
@@ -45,7 +45,7 @@
 
         <section class="security-settings">
             <h2>Security</h2>
-            <form id="security-form" method="POST" action="{{ url_for('settings') }}">
+            <form id="security-form" method="POST" action="{{ url_for('change_password') }}">
                 <div class="form-group">
                     <label for="current-password">Current Password</label>
                     <input type="password" id="current-password" name="current_password" required>
