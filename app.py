@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from DB_connection import ConnectDatabase
 from fpdf import FPDF
 import os
+from urllib.parse import unquote
+from pathlib import Path
 
 app = Flask(__name__)
 app.secret_key = 'OptiVision_Tameer_Redan'  
@@ -407,10 +409,12 @@ class PDF(FPDF):
 
 @app.route('/download_pdf/<int:test_id>/<test_name>')
 def download_pdf(test_id, test_name):
-    print(f"Received test_id: {test_id}, test_name: {test_name}")
-    test_report = db.get_test_report_by_id(test_id, test_name)
+    decoded_test_name = unquote(test_name)  # Decode URL-encoded test_name
+    print(f"Received test_id: {test_id}, test_name: {decoded_test_name}")
+    
+    # Fetch test details
+    test_report = db.get_test_report_by_id(test_id, decoded_test_name)
     if not test_report:
-        print("Test report not found in database.")
         return render_template("error.html", message="The requested test report was not found.")
 
 
@@ -484,11 +488,11 @@ def download_pdf(test_id, test_name):
         "5. Maintain a balanced diet with eye-healthy nutrients.\n"
     )
 
-    # Save and Serve the PDF
-    file_path = f"temp/test_report_{test_id}.pdf"
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    downloads_path = str(Path.home() / "Downloads")  # Get the Downloads folder path
+    file_path = os.path.join(downloads_path, f"Test_Report_{test_id}.pdf")
     pdf.output(file_path)
 
+    # Serve the file for download
     return send_file(file_path, as_attachment=True, download_name=f"Test_Report_{test_id}.pdf")
 
 
