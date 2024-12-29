@@ -407,10 +407,12 @@ class PDF(FPDF):
 
 @app.route('/download_pdf/<int:test_id>/<test_name>')
 def download_pdf(test_id, test_name):
-    # Fetch test details
+    print(f"Received test_id: {test_id}, test_name: {test_name}")
     test_report = db.get_test_report_by_id(test_id, test_name)
     if not test_report:
+        print("Test report not found in database.")
         return render_template("error.html", message="The requested test report was not found.")
+
 
     # Create a PDF
     pdf = PDF()
