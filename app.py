@@ -3,6 +3,7 @@ from DB_connection import ConnectDatabase
 from fpdf import FPDF
 import os
 from pathlib import Path
+from io import BytesIO
 
 app = Flask(__name__)
 app.secret_key = 'OptiVision_Tameer_Redan'  
@@ -409,40 +410,110 @@ class PDF(FPDF):
 @app.route('/download_pdf/<int:test_id>/<test_name>')
 def download_pdf(test_id, test_name):
     from urllib.parse import unquote
-    decoded_test_name = unquote(test_name.replace('_', ' '))  # Decode URL-encoded test_name
+    decoded_test_name = unquote(test_name)  # Decode test name
     print(f"Received test_id: {test_id}, test_name: {decoded_test_name}")
-
+    
     # Fetch test details
     test_report = db.get_test_report_by_id(test_id, decoded_test_name)
+    print(f"Fetched test report: {test_report}")  # Debug print to verify data
     if not test_report:
         return render_template("error.html", message="The requested test report was not found.")
 
-    # Create a PDF
-    pdf = PDF()
-    pdf.add_page()
+    try:
+        # Create a PDF
+        pdf = PDF()
+        pdf.add_page()
 
-    # Add content to PDF
-    pdf.set_font("Arial", style="B", size=12)
-    pdf.cell(0, 10, "Test Details:", ln=True)
-    pdf.set_font("Arial", size=11)
-    pdf.cell(0, 10, f"Test Name: {test_report['test_name']}", ln=True)
-    pdf.cell(0, 10, f"Test Date: {test_report['test_date']}", ln=True)
-    pdf.ln(10)
+        # Test Name and Date
+        pdf.set_font("Arial", style="B", size=12)
+        pdf.cell(0, 10, "Test Details:", ln=True)
+        pdf.set_font("Arial", size=11)
+        pdf.cell(0, 10, f"Test Name: {test_report.get('test_name', 'N/A')}", ln=True)
+        pdf.cell(0, 10, f"Test Date: {test_report.get('test_date', 'N/A')}", ln=True)
+        pdf.ln(10)
 
-    # Example: Score Table
-    pdf.set_font("Arial", style="B", size=12)
-    pdf.set_fill_color(0, 51, 102)  # Dark blue background
-    pdf.set_text_color(255, 255, 255)  # White text
-    pdf.cell(80, 10, "Score", border=1, align="C", fill=True)
-    pdf.cell(80, 10, f"{test_report['obtained_score']} / {test_report['total_tests']}", border=1)
-    pdf.ln(10)
+        # Add Score Table
+        pdf.set_font("Arial", style="B", size=12)
+        pdf.set_fill_color(0, 51, 102)  # Dark blue background
+        pdf.set_text_color(255, 255, 255)  # White text
+        pdf.cell(80, 10, "Category", border=1, align="C", fill=True)
+        pdf.cell(80, 10, "Score", border=1, align="C", fill=True)
+        pdf.ln()
 
-    # Save to Vercel's temporary directory
-    file_path = f"/tmp/Test_Report_{test_id}.pdf"
-    pdf.output(file_path)
+        pdf.set_text_color(0, 0, 0)  # Reset text color for rows
+        pdf.set_font("Arial", size=11)
 
-    # Serve the file for download
-    return send_file(file_path, as_attachment=True, download_name=f"Test_Report_{test_id}.pdf")
+        if test_report["test_name"] == "Visual Acuity":
+            # Display left eye scores
+            pdf.cell(80, 10, "Left Eye Max Level", border=1)
+            pdf.cell(80, 10, f"{test_report.get('left_eye_max_level', 'N/A')} / 17", border=1)
+            pdf.ln()
+
+            # Display left eye incorrect answers
+            pdf.cell(80, 10, "Left Eye Incorrect", border=1)
+            pdf.cell(80, 10, f"{test_report.get('left_eye_incorrect', 'N/A')}", border=1)
+            pdf.ln()
+
+            # Display right eye scores
+            pdf.cell(80, 10, "Right Eye Max Level", border=1)
+            pdf.cell(80, 10, f"{test_report.get('right_eye_max_level', 'N/A')} / 17", border=1)
+            pdf.ln()
+
+            # Display right eye incorrect answers
+            pdf.cell(80, 10, "Right Eye Incorrect", border=1)
+            pdf.cell(80, 10, f"{test_report.get('right_eye_incorrect', 'N/A')}", border=1)
+            pdf.ln()
+
+        else:
+            # General test score
+            pdf.cell(80, 10, "Overall Score", border=1)
+            pdf.cell(80, 10, f"{test_report.get('obtained_score', 'N/A')} / {test_report.get('total_tests', 'N/A')}", border=1)
+            pdf.ln()
+
+        pdf.ln(10)
+
+        # Feedback Section
+        pdf.set_font("Arial", style="B", size=12)
+        pdf.cell(0, 10, "Feedback:", ln=True)
+        pdf.set_font("Arial", size=11)
+        pdf.multi_cell(0, 10, test_report.get("feedback", "No feedback available."))
+        pdf.ln(10)
+
+        # Add Recommendations Section
+        pdf.set_font("Arial", style="B", size=12)
+        pdf.cell(0, 10, "Our Recommendations:", ln=True)
+        pdf.set_font("Arial", size=11)
+        pdf.multi_cell(0, 10, 
+            "1. Take regular breaks during screen time.\n"
+            "2. Ensure adequate lighting when reading or working.\n"
+            "3. Follow up with an eye care professional if issues persist.\n"
+            "4. Keep your eyewear prescription up to date.\n"
+            "5. Maintain a balanced diet with eye-healthy nutrients.\n"
+        )
+
+        # Use a temporary directory to save the PDF
+        import tempfile
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+            pdf.output(tmp_file.name)
+            tmp_file_path = tmp_file.name
+
+        # Read the PDF content and serve it
+        with open(tmp_file_path, 'rb') as pdf_file:
+            pdf_content = pdf_file.read()
+
+        # Clean up the temporary file
+        os.remove(tmp_file_path)
+
+        # Create response with PDF content
+        response = make_response(pdf_content)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'attachment; filename=Test_Report_{test_id}.pdf'
+
+        return response
+
+    except Exception as e:
+        print(f"Error generating PDF: {str(e)}")
+        return render_template("error.html", message="An error occurred while generating the PDF report.")
 
 
 if __name__ == '__main__':

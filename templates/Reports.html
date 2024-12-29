@@ -13,7 +13,7 @@
 <body>
     <script id="performance-data" type="application/json">
         {{ performance_data|tojson }}
-    </script>
+    </script>    
     <div class="dashboard">
         <aside class="sidebar">
             <div class="logo">
@@ -23,8 +23,7 @@
                 <ul>
                     <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a></li>
                     <li><a href="{{ url_for('TestsSection') }}"><i class="fas fa-tasks"></i> Tests</a></li>
-                    <li><a href="{{ url_for('reports') }}" class="active"><i class="fas fa-file-alt"></i> Reports</a>
-                    </li>
+                    <li><a href="{{ url_for('reports') }}" class="active"><i class="fas fa-file-alt"></i> Reports</a></li>
                     <li><a href="{{ url_for('settings') }}"><i class="fas fa-cog"></i> Settings</a></li>
                     <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
@@ -65,7 +64,7 @@
                     <h3>Eye Health Status</h3>
                     <p>{{ eye_health_status }}</p>
                 </div>
-
+                
             </section>
 
             <section class="detailed-reports">
@@ -87,12 +86,11 @@
                             <td>{{ report.score_display }}</td>
                             <td class="status-{{ report.status|lower }}">{{ report.status }}</td>
                             <td class="actions">
-                                <a href="{{ url_for('download_pdf', test_id=report.id, test_name=report.test_name.replace(' ', '_')) }}"
-                                    class="btn-view">
+                                <a href="{{ url_for('download_pdf', test_id=report.id, test_name=report.test_name) }}" class="btn-view">
                                     <i class="fas fa-download"></i> Download PDF
                                 </a>
                             </td>
-
+                            
                         </tr>
                         {% endfor %}
                     </tbody>
