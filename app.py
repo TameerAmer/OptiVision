@@ -1,9 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, make_response,send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, make_response
 from DB_connection import ConnectDatabase
 from fpdf import FPDF
 import os
-from pathlib import Path
-from io import BytesIO
 
 app = Flask(__name__)
 app.secret_key = 'OptiVision_Tameer_Redan'  
