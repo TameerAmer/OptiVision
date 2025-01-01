@@ -419,12 +419,14 @@ def download_pdf(test_id, test_name):
         pdf = PDF()
         pdf.add_page()
 
+        pdf.set_font("Arial", size=11)
+        pdf.cell(0, 10, f"User Name: {session['user_name']}", ln=True)
         # Test Name and Date
         pdf.set_font("Arial", style="B", size=12)
         pdf.cell(0, 10, "Test Details:", ln=True)
         pdf.set_font("Arial", size=11)
         pdf.cell(0, 10, f"Test Name: {test_report.get('test_name', 'N/A')}", ln=True)
-        pdf.cell(0, 10, f"Test Date: {test_report.get('test_date', 'N/A')}", ln=True)
+        pdf.cell(0, 10, f"Test Date: {test_report.get('test_date', 'N/A')}")
         pdf.ln(10)
 
         # Add Score Table
