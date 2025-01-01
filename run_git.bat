@@ -17,7 +17,7 @@ set "formattedDate=%day%-%month%-%year:~-2%"
 ::%formattedDate%     To Set the date as a message
 git status
 git add .
-git commit -m "%formattedDate%"
+git commit -m "Added Callibration"
 git push -u origin main
 
 endlocal

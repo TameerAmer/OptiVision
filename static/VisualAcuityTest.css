@@ -143,3 +143,48 @@ path:focus {
     max-width: 600px;
     /* Restrict width for better readability */
 }
+
+#calibration-page {
+    display: flex; /* Ensure visibility at start */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    color: #333;
+}
+
+#calibration-line {
+    transition: width 0.2s ease;
+}
+
+#calibration-slider {
+    margin-top: 10px;
+}
+#instructions-page {
+    display: none; /* Hide initially */
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#calibration-ok {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#calibration-ok:hover {
+    background-color: #4cae4c;
+}
+
+
+
+

@@ -9,6 +9,17 @@
 </head>
 
 <body>
+    <div id="calibration-page" style="display: block; text-align: center;">
+        <h1>Screen Calibration</h1>
+        <p>1) Bring a ruler</p><br>
+        <p>2) Adjust the slider so the black line below is exactly 5 cm when measured with your ruler.</p>
+        <div id="calibration-line" style="width: 175px; height: 2px; background: black; margin: 20px auto;"></div>
+        <input type="range" id="calibration-slider" min="50" max="500" value="175"
+            style="width: 80%; margin-top: 20px;" />
+        <p>Move the slider to adjust the line size.</p>
+        <button id="calibration-ok" style="margin-top: 20px;">OK</button>
+    </div>
+
     <div class="content-container">
         <h1 id="title">Instructions!</h1>
         <p id="instructions">I)Make sure to turn your brightness all the

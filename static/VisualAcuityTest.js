@@ -1,7 +1,7 @@
 // Define the tests with their rotation angles, correct answers, and sizes
 const tests = [
-  { level: 1, rotation: 0, correctAnswer: "1", width: "50px" },
-  { level: 2, rotation: 270, correctAnswer: "7", width: "36px" },
+  { level: 1, rotation: 0, correctAnswer: "1", width: "35px" },
+  { level: 2, rotation: 270, correctAnswer: "7", width: "28px" },
   { level: 3, rotation: 45, correctAnswer: "2", width: "24px" },
   { level: 4, rotation: 135, correctAnswer: "4", width: "24px" },
   { level: 5, rotation: 180, correctAnswer: "5", width: "18px" },
@@ -13,10 +13,10 @@ const tests = [
   { level: 11, rotation: 90, correctAnswer: "3", width: "8px" },
   { level: 12, rotation: 135, correctAnswer: "4", width: "6px" },
   { level: 13, rotation: 315, correctAnswer: "8", width: "6px" },
-  { level: 14, rotation: 45, correctAnswer: "2", width: "6px" },
-  { level: 15, rotation: 270, correctAnswer: "7", width: "4px" },
-  { level: 16, rotation: 225, correctAnswer: "6", width: "4px" },
-  { level: 17, rotation: 0, correctAnswer: "1", width: "4px" },
+  { level: 14, rotation: 45, correctAnswer: "2", width: "4px" },
+  { level: 15, rotation: 270, correctAnswer: "7", width: "3.5px" },
+  { level: 16, rotation: 225, correctAnswer: "6", width: "3.5px" },
+  { level: 17, rotation: 0, correctAnswer: "1", width: "3.5px" },
 ];
 
 let currentTestIndex = 0;
@@ -103,7 +103,7 @@ function handleCoverEyeOK() {
       coverEyeMessage.style.display = "none";
 
       // Reset for right eye test
-      leftEyeIncorrect=incorrectAnswers;
+      leftEyeIncorrect = incorrectAnswers;
       currentTestIndex = 0;
       incorrectAnswers = 0;
       highestLevelPassed = 1;
@@ -285,8 +285,8 @@ function startTest() {
 // Confirmation for page navigation
 function confirmNavigation(event) {
   if (testInProgress) {
-      event.preventDefault(); // Standard way to show confirmation dialog
-      event.returnValue = ''; // Required for Chrome
+    event.preventDefault(); // Standard way to show confirmation dialog
+    event.returnValue = ""; // Required for Chrome
   }
 }
 
@@ -301,7 +301,7 @@ function endTest() {
   // If we just finished the right eye test, record it
   if (currentEye === "Right") {
     rightEyeLevel = highestLevelPassed;
-    rightEyeIncorrect=incorrectAnswers;
+    rightEyeIncorrect = incorrectAnswers;
   }
 
   // Provide comprehensive feedback
@@ -341,7 +341,7 @@ function endTest() {
 
   // Add a click event listener to the OK button
   okButton.addEventListener("click", () => {
-    window.removeEventListener("beforeunload", confirmNavigation);// Remove the navigation prevention event listener
+    window.removeEventListener("beforeunload", confirmNavigation); // Remove the navigation prevention event listener
     // Clear the content container
     contentContainer.innerHTML = "";
 
@@ -387,7 +387,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Start the test
       startTest();
-      window.addEventListener('beforeunload', confirmNavigation);
+      window.addEventListener("beforeunload", confirmNavigation);
     });
   }
 
@@ -425,3 +425,56 @@ function saveTestResult() {
     })
     .catch((error) => console.error("Error:", error));
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const calibrationPage = document.getElementById("calibration-page");
+  const instructionsPage = document.querySelector(".content-container");
+  const calibrationSlider = document.getElementById("calibration-slider");
+  const calibrationLine = document.getElementById("calibration-line");
+  const calibrationOk = document.getElementById("calibration-ok");
+  const basePxPerCm = 35;
+  const baseLineLengthPx = 5 * basePxPerCm + 48;
+
+  // Ensure calibration page is shown and others are hidden initially
+  calibrationPage.style.display = "flex";
+  instructionsPage.style.display = "none";
+
+  // Set the default slider value and line width to match your base calibration
+  calibrationSlider.value = baseLineLengthPx;
+  calibrationLine.style.width = `${baseLineLengthPx}px`;
+
+  // Update the calibration line dynamically based on slider value
+  calibrationSlider.addEventListener("input", () => {
+      const sliderValue = calibrationSlider.value;
+      calibrationLine.style.width = `${sliderValue}px`;
+  });
+
+  // Handle calibration confirmation
+  calibrationOk.addEventListener("click", () => {
+      const sliderValue = calibrationSlider.value;
+      const calibratedPxPerCm = sliderValue / 5; // 5 cm as the reference
+      const scalingFactor = calibratedPxPerCm / basePxPerCm;
+
+      adjustTests(scalingFactor);
+
+      // Hide the calibration page and show the instructions page
+      calibrationPage.style.display = "none";
+      instructionsPage.style.display = "block";
+
+      console.log(`Calibration complete. pxPerCm: ${calibratedPxPerCm}, Scaling Factor: ${scalingFactor}`);
+  });
+
+  // Function to adjust the tests array based on the scaling factor
+  function adjustTests(scalingFactor) {
+      tests.forEach((test) => {
+          const originalWidth = parseFloat(test.width.replace("px", ""));
+          test.width = `${originalWidth * scalingFactor}px`;
+      });
+      console.log("Adjusted tests:", tests);
+  }
+});
+
+
+
+
+

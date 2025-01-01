@@ -260,3 +260,7 @@ body.dark-mode .sidebar .menu ul li a.active,
 body.dark-mode .sidebar .menu ul li a:hover {
     background-color: #4c566a;
 } 
+
+h2{
+    color: #2d8fbd; 
+}
