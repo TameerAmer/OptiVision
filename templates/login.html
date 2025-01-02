@@ -14,7 +14,6 @@
 <body>
     <div id="particles-container" class="absolute top-0 left-0 w-full h-full -z-10">
         <script>
-            // Load the tsParticles script dynamically
             const loadExternalScript = (url) => {
                 return new Promise((resolve, reject) => {
                     const script = document.createElement("script");
@@ -26,66 +25,62 @@
                 });
             };
 
-            loadExternalScript("https://cdn.jsdelivr.net/npm/tsparticles@1.37.4/tsparticles.min.js")
-                .then(() => {
-                    // Initialize tsParticles
-                    const initializeParticles = () => {
-                        if (window.tsParticles) {
-                            tsParticles.load("tsparticles", {
-                                interactivity: {
-                                    events: {
-                                        onClick: { enable: true, mode: "push" },
-                                        onHover: { enable: true, mode: "bubble" },
-                                        resize: true,
-                                    },
-                                    modes: {
-                                        bubble: {
-                                            distance: 400,
-                                            duration: 2,
-                                            opacity: 0.8,
-                                            size: 20,
+            window.onload = () => {
+                console.log("Page fully loaded. Initializing particles...");
+                loadExternalScript("https://cdn.jsdelivr.net/npm/tsparticles@1.37.4/tsparticles.min.js")
+                    .then(() => {
+                        const initializeParticles = () => {
+                            if (window.tsParticles) {
+                                tsParticles.load("tsparticles", {
+                                    interactivity: {
+                                        events: {
+                                            onClick: { enable: true, mode: "push" },
+                                            onHover: { enable: true, mode: "bubble" },
+                                            resize: true,
                                         },
-                                        push: { quantity: 4 },
+                                        modes: {
+                                            bubble: {
+                                                distance: 400,
+                                                duration: 2,
+                                                opacity: 0.8,
+                                                size: 20,
+                                            },
+                                            push: { quantity: 4 },
+                                        },
                                     },
-                                },
-                                particles: {
-                                    color: { value: "#4bc0c0" },
-                                    links: {
-                                        color: "#4bc0c0",
-                                        distance: 150,
-                                        enable: true,
-                                        opacity: 0.5,
-                                        width: 1,
+                                    particles: {
+                                        color: { value: "#4bc0c0" },
+                                        links: {
+                                            color: "#4bc0c0",
+                                            distance: 150,
+                                            enable: true,
+                                            opacity: 0.5,
+                                            width: 1,
+                                        },
+                                        move: {
+                                            direction: "none",
+                                            enable: true,
+                                            speed: 2,
+                                            outModes: { default: "bounce" },
+                                        },
+                                        number: {
+                                            density: { enable: true, area: 800 },
+                                            value: 80,
+                                        },
+                                        opacity: { value: 0.5 },
+                                        shape: { type: "circle" },
+                                        size: { value: 5 },
                                     },
-                                    move: {
-                                        direction: "none",
-                                        enable: true,
-                                        speed: 2,
-                                        outModes: { default: "bounce" },
-                                    },
-                                    number: {
-                                        density: { enable: true, area: 800 },
-                                        value: 80,
-                                    },
-                                    opacity: { value: 0.5 },
-                                    shape: { type: "circle" },
-                                    size: { value: 5 },
-                                },
-                            });
-                        }
-                    };
+                                });
+                            }
+                        };
 
-                    // Ensure reinitialization on logout or page load
-                    document.addEventListener("DOMContentLoaded", initializeParticles);
-                    document.addEventListener("logoutEvent", () => {
-                        if (window.tsParticles) {
-                            tsParticles.dom().forEach((instance) => instance.destroy());
-                        }
                         initializeParticles();
-                    });
-                })
-                .catch((error) => console.error("Script loading failed.", error));
+                    })
+                    .catch((error) => console.error("Script loading failed.", error));
+            };
         </script>
+
         <div id="tsparticles"></div>
     </div>
 
