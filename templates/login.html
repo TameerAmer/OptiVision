@@ -12,12 +12,89 @@
 </head>
 
 <body>
+    <div id="particles-container" class="absolute top-0 left-0 w-full h-full -z-10">
+        <script>
+            // Load the tsParticles script dynamically
+            const loadExternalScript = (url) => {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement("script");
+                    script.src = url;
+                    script.async = true;
+                    script.onload = () => resolve(script);
+                    script.onerror = () => reject(new Error(`Script load error for ${url}`));
+                    document.body.appendChild(script);
+                });
+            };
+
+            loadExternalScript("https://cdn.jsdelivr.net/npm/tsparticles@1.37.4/tsparticles.min.js")
+                .then(() => {
+                    // Initialize tsParticles
+                    const initializeParticles = () => {
+                        if (window.tsParticles) {
+                            tsParticles.load("tsparticles", {
+                                interactivity: {
+                                    events: {
+                                        onClick: { enable: true, mode: "push" },
+                                        onHover: { enable: true, mode: "bubble" },
+                                        resize: true,
+                                    },
+                                    modes: {
+                                        bubble: {
+                                            distance: 400,
+                                            duration: 2,
+                                            opacity: 0.8,
+                                            size: 20,
+                                        },
+                                        push: { quantity: 4 },
+                                    },
+                                },
+                                particles: {
+                                    color: { value: "#4bc0c0" },
+                                    links: {
+                                        color: "#4bc0c0",
+                                        distance: 150,
+                                        enable: true,
+                                        opacity: 0.5,
+                                        width: 1,
+                                    },
+                                    move: {
+                                        direction: "none",
+                                        enable: true,
+                                        speed: 2,
+                                        outModes: { default: "bounce" },
+                                    },
+                                    number: {
+                                        density: { enable: true, area: 800 },
+                                        value: 80,
+                                    },
+                                    opacity: { value: 0.5 },
+                                    shape: { type: "circle" },
+                                    size: { value: 5 },
+                                },
+                            });
+                        }
+                    };
+
+                    // Ensure reinitialization on logout or page load
+                    document.addEventListener("DOMContentLoaded", initializeParticles);
+                    document.addEventListener("logoutEvent", () => {
+                        if (window.tsParticles) {
+                            tsParticles.dom().forEach((instance) => instance.destroy());
+                        }
+                        initializeParticles();
+                    });
+                })
+                .catch((error) => console.error("Script loading failed.", error));
+        </script>
+        <div id="tsparticles"></div>
+    </div>
+
     <div class="page-wrapper">
         <div class="welcome-banner">
             <h1>Welcome to OptiVision!</h1>
             <!-- Dark/Light Mode Toggle Button with Icon -->
             <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">
-                <i class="fas fa-moon" id="theme-icon"></i> <!-- Moon icon for dark mode -->
+                <i class="fas fa-moon" id="theme-icon"></i>
             </button>
         </div>
 
@@ -37,12 +114,13 @@
                 <a href="{{ url_for('register') }}">Register</a>
             </form>
         </div>
+
         <footer class="footer">
             <div class="footer-container">
                 <div class="footer-section">
                     <h3>About OptiVision</h3>
-                    <p>OptiVision provides advanced tools to help you maintain your vision health. Empowering you with
-                        personalized care and early detection.</p>
+                    <p>OptiVision provides advanced tools to help you maintain your vision health. Empowering you
+                        with personalized care and early detection.</p>
                 </div>
                 <div class="footer-section">
                     <h3>Contact Information</h3>
@@ -76,11 +154,7 @@
                 <p>&copy; 2024 OptiVision. All rights reserved.</p>
             </div>
         </footer>
-
     </div>
-
-
-
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
