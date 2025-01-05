@@ -42,8 +42,14 @@ document.addEventListener("DOMContentLoaded", function () {
   okButton.addEventListener("click", function () {
     testControls.style.display = "none";
     testArea.style.display = "block";
-    document.getElementById("instructions").style.display = "none";
-    document.getElementById("title").textContent = "Contrast Vision Test";
+    //document.getElementById("instructions").style.display = "none";
+    document.getElementById("instructions").innerText =
+        "Identify which side has the darker pattern!";
+      document.getElementById("instructions").style.cssText = `
+        text-align: center; 
+        font-weight: bold;
+        font-size: 20px;
+        `;
     startTest();
     testStarted = true;
     window.addEventListener("beforeunload", confirmNavigation);
@@ -79,11 +85,15 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function generateContrastPattern() {
-    // Start with dark square (0) and fade to white (255)
-    const squareColor = Math.min(255, Math.floor(255 * (currentLevel / 17))); // Square gets lighter
+    // Adjust the maximum square  to 253
+    const maxSquareColor = 250;
+    const squareColor = Math.min(
+      maxSquareColor,
+      Math.floor(maxSquareColor * (currentLevel / 17))
+    ); // Square gets lighter up to 253
     const backgroundColor = 255; // Background stays white
 
-    const isLeft = Math.random() > 0.5;
+    const isLeft = Math.random() > 0.5; // Randomly position the square on the left or right
 
     contrastPattern.innerHTML = `
             <div style="position: relative; width: 300px; height: 300px; background-color: rgb(${backgroundColor}, ${backgroundColor}, ${backgroundColor}); margin: 20px auto; border: 1px solid #ccc;">
@@ -118,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (currentLevel < 17) {
         currentLevel++;
         currentCorrectAnswer = generateContrastPattern();
-      } else {
+      } else if (currentLevel == 17) {
         completeTest();
       }
     } else {

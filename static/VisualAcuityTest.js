@@ -14,9 +14,9 @@ const tests = [
   { level: 12, rotation: 135, correctAnswer: "4", width: "6px" },
   { level: 13, rotation: 315, correctAnswer: "8", width: "6px" },
   { level: 14, rotation: 45, correctAnswer: "2", width: "4px" },
-  { level: 15, rotation: 270, correctAnswer: "7", width: "3.5px" },
-  { level: 16, rotation: 225, correctAnswer: "6", width: "3.5px" },
-  { level: 17, rotation: 0, correctAnswer: "1", width: "3.5px" },
+  { level: 15, rotation: 270, correctAnswer: "7", width: "2.5px" },
+  { level: 16, rotation: 225, correctAnswer: "6", width: "2.5px" },
+  { level: 17, rotation: 0, correctAnswer: "1", width: "2.5px" },
 ];
 
 let currentTestIndex = 0;
@@ -80,9 +80,12 @@ function determineVisionFeedback(leftEye, rightEye) {
     feedback.message =
       "Your vision is okay, but consider an eye checkup for better clarity.";
     feedback.color = "#f0ad4e";
-  } else {
+  }else if (averageLevel >= 15 && averageLevel < 17) { 
     feedback.message =
-      "Great! Your vision seems excellent. Keep maintaining eye health.";
+      "Your vision is very good, but remember to keep an eye on your health.";
+    feedback.color = "#f0ad4e";
+  } else if (averageLevel === 17) {
+    feedback.message = "Great! Your vision seems excellent. Keep maintaining eye health.";
     feedback.color = "#5cb85c";
   }
   feedBack = feedback.message;

@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function showBlurText() {
     currentNumber = generateRandomNumber().toString();
-    const blurAmount = currentLevel * 0.8;
+    const blurAmount = currentLevel * 0.9;
 
     blurText.innerHTML = `
           <div style="text-align: center;">
@@ -133,11 +133,12 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       // Just show the next number without incrementing score
       currentLevel++;
+      incorrectAnswers++;
       showBlurText();
     }
 
     // Check if test should end
-    if (currentLevel > MAX_LEVELS) {
+    if (currentLevel >= MAX_LEVELS) {
       completeTest();
     }
   };

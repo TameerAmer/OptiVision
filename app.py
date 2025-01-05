@@ -513,5 +513,25 @@ def download_pdf(test_id, test_name):
         return render_template("error.html", message="An error occurred while generating the PDF report.")
 
 
+@app.route('/glasses')
+def glasses():
+    if 'user_name' not in session:
+        return redirect(url_for('login'))
+    response = make_response(render_template('glasses.html'))
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, proxy-revalidate'
+    return response
+
+@app.route('/update_glasses_status', methods=['POST'])
+def update_glasses_status():
+    data = request.get_json()
+    wears_glasses = data['wearsGlasses']
+    user_id = session['user_id']  
+
+    # Update database using the ConnectDatabase class method
+    success = db.update_glasses_status(user_id, wears_glasses)
+    return jsonify(success=success)
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

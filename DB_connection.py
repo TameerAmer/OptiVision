@@ -603,6 +603,22 @@ class ConnectDatabase:
                 cursor.close()
             if connection:
                 connection.close()
+    
+    def update_glasses_status(self, user_id, wears_glasses):#Update glasses status in the database
+        try:
+            con = self.get_connection()
+            if con is not None:
+                cursor = con.cursor()
+                query = "UPDATE users SET glasses = %s WHERE user_id = %s"
+                cursor.execute(query, (wears_glasses, user_id))
+                con.commit()
+                return True
+        except Error as e:
+            print(f"Error updating glasses status: {e}")
+            return False
+        finally:
+            if cursor:
+                cursor.close()
 
 
 
