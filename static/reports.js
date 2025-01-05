@@ -111,7 +111,11 @@ const chart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: labels,
-        datasets: Object.values(datasets)
+        datasets: Object.values(datasets).map(dataset => ({
+            ...dataset,
+            pointRadius: 10, // Set the circle size here
+            pointHoverRadius: 12 // Set the size on hover
+        }))
     },
     options: {
         plugins: {
@@ -161,6 +165,7 @@ const chart = new Chart(ctx, {
         }
     }
 });
+
 
 // Utility function to generate random colors
 function getRandomColor() {
