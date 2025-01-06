@@ -69,29 +69,27 @@ function determineVisionFeedback(leftEye, rightEye) {
   };
 
   if (averageLevel < 5) {
-    feedback.message =
-      "Your vision seems too low! You should visit an eye doctor immediately.";
+    feedback.message = "Your vision seems too low! You should visit an eye doctor immediately.";
     feedback.color = "#d9534f";
   } else if (averageLevel <= 10) {
-    feedback.message =
-      "Your vision needs attention. We recommend scheduling a visit to an eye doctor.";
+    feedback.message = "Your vision needs attention. We recommend scheduling a visit to an eye doctor.";
     feedback.color = "#f0ad4e";
-  } else if (averageLevel <= 13) {
-    feedback.message =
-      "Your vision is okay, but consider an eye checkup for better clarity.";
-    feedback.color = "#f0ad4e";
-  }else if (averageLevel >= 15 && averageLevel < 17) { 
-    feedback.message =
-      "Your vision is very good, but remember to keep an eye on your health.";
+  } else if (averageLevel <= 14) {
+    feedback.message = "Your vision is okay, but consider an eye checkup for better clarity.";
+    feedback.color = "#f0ad4e"; 
+  } else if (averageLevel >= 15 && averageLevel < 17) {
+    feedback.message = "Your vision is very good, but remember to keep an eye on your health.";
     feedback.color = "#f0ad4e";
   } else if (averageLevel === 17) {
     feedback.message = "Great! Your vision seems excellent. Keep maintaining eye health.";
     feedback.color = "#5cb85c";
   }
+
   feedBack = feedback.message;
   feedback.message += `<br>Left Eye Level: ${leftEye}/17<br>Right Eye Level: ${rightEye}/17`;
   return feedback;
 }
+
 
 // Function to handle closing the cover eye message
 function handleCoverEyeOK() {
