@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 import bcrypt
+from datetime import datetime
 
 class ConnectDatabase:
     def __init__(self):
@@ -334,14 +335,22 @@ class ConnectDatabase:
             cursor.execute("SELECT Password FROM users WHERE user_id = %s", (user_id,))
             user = cursor.fetchone()
             
-            if not user or user['Password'] != current_password:
+            if not user:
+                return "User not found"
+
+            # Check if the current password matches the hashed password in the database
+            if not bcrypt.checkpw(current_password.encode('utf-8'), user['Password'].encode('utf-8')):
                 return "Current password is incorrect"
-            # Update password
+
+            # Hash the new password
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+            # Update password in the database
             cursor.execute("UPDATE users SET Password = %s WHERE user_id = %s", 
-                        (new_password, user_id))
+                        (hashed_password.decode('utf-8'), user_id))
             connection.commit()
             return "success"
-        except Error as e:
+        except Exception as e:
             print(f"Password change error: {e}")
             return str(e)
         finally:
@@ -349,6 +358,7 @@ class ConnectDatabase:
                 cursor.close()
             if connection:
                 connection.close()
+
     def delete_account(self, user_id):
         connection = None
         cursor = None
@@ -622,8 +632,115 @@ class ConnectDatabase:
         finally:
             if cursor:
                 cursor.close()
+#-------------------------------------------------Password Reset--------------------------------------------------------------------
+    def set_password_reset_token(self, email, token, expiry):
+        try:
+            connection = self.get_connection()
+            cursor = connection.cursor()
+            query = """
+                UPDATE users 
+                SET password_reset_token = %s, token_expiry = %s 
+                WHERE Email = %s
+            """
+            cursor.execute(query, (token, expiry, email))
+            connection.commit()
+            return True
+        except Exception as e:
+            print(f"Error setting reset token: {e}")
+            return False
+        finally:
+            cursor.close()
+            connection.close()
+
+    def verify_reset_token(self, token):
+        try:
+            connection = self.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            query = """
+                SELECT user_id FROM users 
+                WHERE password_reset_token = %s AND token_expiry > %s
+            """
+            cursor.execute(query, (token, datetime.now()))
+            return cursor.fetchone()
+        except Exception as e:
+            print(f"Error verifying reset token: {e}")
+            return None
+        finally:
+            cursor.close()
+            connection.close()
+
+    def update_password(self, email, new_password):
+        try:
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+            connection = self.get_connection()
+            cursor = connection.cursor()
+            query = """
+                UPDATE users 
+                SET Password = %s, password_reset_token = NULL, token_expiry = NULL 
+                WHERE Email = %s
+            """
+            cursor.execute(query, (hashed_password.decode('utf-8'), email))
+            connection.commit()
+            return True
+        except Exception as e:
+            print(f"Error updating password: {e}")
+            return False
+        finally:
+            cursor.close()
+            connection.close()
 
 
+    def get_user_by_email(self, email):
+        try:
+            connection = self.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            query = "SELECT * FROM users WHERE Email = %s"
+            cursor.execute(query, (email,))
+            return cursor.fetchone()  # Returns user data if found
+        except Exception as e:
+            print(f"Error fetching user by email: {e}")
+            return None
+        finally:
+            cursor.close()
+            connection.close()
+
+    def get_email_by_reset_token(self, token):
+        try:
+            connection = self.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            query = """
+                SELECT Email 
+                FROM users 
+                WHERE password_reset_token = %s AND token_expiry > %s
+            """
+            cursor.execute(query, (token, datetime.now()))
+            result = cursor.fetchone()
+            return result['Email'] if result else None
+        except Exception as e:
+            print(f"Error fetching email by reset token: {e}")
+            return None
+        finally:
+            cursor.close()
+            connection.close()
+
+    def delete_reset_token(self, token):
+        try:
+            connection = self.get_connection()
+            cursor = connection.cursor()
+            query = """
+                UPDATE users 
+                SET password_reset_token = NULL, token_expiry = NULL 
+                WHERE password_reset_token = %s
+            """
+            cursor.execute(query, (token,))
+            connection.commit()
+            return True
+        except Exception as e:
+            print(f"Error deleting reset token: {e}")
+            return False
+        finally:
+            cursor.close()
+            connection.close()
 
 
 

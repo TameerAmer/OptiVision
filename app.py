@@ -2,6 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from DB_connection import ConnectDatabase
 from fpdf import FPDF
 import os
+import bcrypt
+import secrets
+import smtplib
+from email.mime.text import MIMEText
+from datetime import datetime
+from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = 'OptiVision_Tameer_Redan'  
@@ -533,6 +539,79 @@ def update_glasses_status():
     success = db.update_glasses_status(user_id, wears_glasses)
     return jsonify(success=success)
 
+
+@app.route('/request_password_reset', methods=['GET', 'POST'])
+def request_password_reset():
+    if request.method == 'POST':
+        email = request.form['email']
+        user = db.get_user_by_email(email)  # Fetch user data by email
+        if not user:
+            flash('Email not found', 'error')
+            return redirect(url_for('request_password_reset'))
+
+        # Generate a secure token
+        reset_token = secrets.token_urlsafe(32)
+        db.set_password_reset_token(email, reset_token, datetime.now() + timedelta(hours=1))
+
+        # Send the token via email
+        reset_url = url_for('reset_password', token=reset_token, _external=True)
+        send_reset_email(email, reset_url)
+
+        flash('Password reset email sent. Check your inbox.', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('request_password_reset.html')
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    email = db.get_email_by_reset_token(token)  # Fetch email using the reset token
+    if not email:
+        flash('Invalid or expired token', 'error')
+        return redirect(url_for('request_password_reset'))
+
+    if request.method == 'POST':
+        new_password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if new_password != confirm_password:
+            flash('Passwords do not match', 'error')
+            return redirect(url_for('reset_password', token=token))
+
+        db.update_password(email, new_password)  # Update password
+        db.delete_reset_token(token)  # Clean up the token after use
+
+        flash('Password successfully reset. Please log in.', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('reset_password.html', token=token)
+
+
+
+def send_reset_email(to_email, reset_url):
+    # Email credentials
+    from_email = 'optivisionteam2025@gmail.com'
+    app_password = 'wlkmzynuprmhwfls'  # Use the generated app password
+    
+    # Email content
+    subject = 'Password Reset Request'
+    body = f"Click the link below to reset your password:\n\n{reset_url}\n\nIf you did not request this, please ignore this email.\nCheers,\nOptiVision Team"
+
+    # Create the email message
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = from_email
+    msg['To'] = to_email
+
+    try:
+        # Connect to Gmail SMTP server
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()  # Start TLS encryption
+            server.login(from_email, app_password)  # Use app password
+            server.sendmail(from_email, to_email, msg.as_string())  # Send the email
+            print("Email sent successfully!")
+    except Exception as e:
+        print(f"Error sending email: {e}")
 
 
 if __name__ == '__main__':
