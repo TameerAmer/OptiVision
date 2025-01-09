@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+import bcrypt
 
 class ConnectDatabase:
     def __init__(self):
@@ -44,11 +45,13 @@ class ConnectDatabase:
                 print(f"Email {email} already exists")
                 return "Email already exists"
 
+            # Hash the password
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
             # Insert new user
             sql = "INSERT INTO users (Name, Email, Password) VALUES (%s, %s, %s)"
-            
             try:
-                cursor.execute(sql, (name, email, password))
+                cursor.execute(sql, (name, email, hashed_password.decode('utf-8')))
                 connection.commit()
                 print(f"User {email} registered successfully!")
                 return "success"
@@ -91,7 +94,7 @@ class ConnectDatabase:
                 return "Email does not exist"
 
             # Verify password
-            if user['Password'] == password:
+            if bcrypt.checkpw(password.encode('utf-8'), user['Password'].encode('utf-8')):
                 return "True details"
             else:
                 return "Incorrect password"
