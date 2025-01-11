@@ -595,7 +595,7 @@ def send_reset_email(to_email, reset_url):
     
     # Email content
     subject = 'Password Reset Request'
-    body = f"Click the link below to reset your password:\n\n{reset_url}\n\nIf you did not request this, please ignore this email.\nCheers,\nOptiVision Team"
+    body = f"Click the link below to reset your password:\n\n{reset_url}\n\nIf you did not request this, please ignore this email.\n\nCheers,\n\nThe OptiVision Team"
 
     # Create the email message
     msg = MIMEText(body)
