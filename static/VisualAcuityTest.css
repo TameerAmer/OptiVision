@@ -145,7 +145,8 @@ path:focus {
 }
 
 #calibration-page {
-    display: flex; /* Ensure visibility at start */
+    display: flex;
+    /* Ensure visibility at start */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -161,8 +162,10 @@ path:focus {
 #calibration-slider {
     margin-top: 10px;
 }
+
 #instructions-page {
-    display: none; /* Hide initially */
+    display: none;
+    /* Hide initially */
     text-align: center;
     padding: 40px;
     background: rgba(255, 255, 255, 0.9);
@@ -205,7 +208,8 @@ path:focus {
     border-radius: 10px;
     text-align: center;
     width: 300px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Consistent shadow */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* Consistent shadow */
 }
 
 button {
@@ -223,7 +227,209 @@ button:hover {
     background-color: #4cae4c;
 }
 
+.camera-container {
+    position: relative;
+    width: 640px;
+    max-width: 100%;
+    margin: 20px auto;
+}
+
+#camera-feed,
+#face-overlay {
+    width: 100%;
+    display: block;
+}
+
+#face-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.distance-display {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 16px;
+    z-index: 2;
+}
+
+/* Button styles */
+.distance-check-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.distance-check-btn:hover {
+    background-color: #4cae4c;
+    transform: translateY(-1px);
+}
+
+/* Distance check overlay styles */
+.distance-check-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.distance-check-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow: auto;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.distance-check-container h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
 
 
+#camera-feed {
+    width: 100%;
+    display: block;
+    background: #000;
+}
 
 
+.distance-display.too-close {
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+}
+
+.distance-display.too-far {
+    background: rgba(255, 193, 7, 0.9);
+    color: black;
+}
+
+.distance-display.perfect {
+    background: rgba(40, 167, 69, 0.9);
+    color: white;
+}
+
+.distance-instructions {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.distance-instructions p {
+    margin: 10px 0;
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.close-camera-btn {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.close-camera-btn:hover {
+    background: #4cae4c;
+    transform: translateY(-1px);
+}
+
+.digital-ruler-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.digital-ruler-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.digital-ruler {
+    margin: 20px auto;
+    border: 1px solid #333;
+    position: relative;
+}
+
+.ruler-marks {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+}
+
+.ruler-mark {
+    position: absolute;
+    width: 1px;
+    height: 8px;
+    background: #333;
+}
+
+.ruler-mark.cm {
+    height: 12px;
+}
+
+.ruler-number {
+    position: absolute;
+    top: -20px;
+    transform: translateX(-50%);
+    font-size: 12px;
+}
+
+.digital-ruler-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.digital-ruler-btn:hover {
+    background: #45a049;
+}

@@ -6,7 +6,7 @@ if (localStorage.getItem('darkMode') === 'enabled') {
 }
 
 // Dark/Light Mode Toggle Function
-document.getElementById('theme-toggle').addEventListener('click', function() {
+document.getElementById('theme-toggle').addEventListener('click', function () {
   // Toggle Dark Mode on body
   document.body.classList.toggle('dark-mode');
 

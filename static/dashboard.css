@@ -125,7 +125,8 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px; /* Small spacing above the button */
+    margin-top: 10px;
+    /* Small spacing above the button */
     background-color: #f9f9f9;
     height: 10vh;
 }
@@ -135,7 +136,8 @@ body.dark-mode .StartTestButton {
 }
 
 .AllTestsButton {
-    background-color: #3b82f6; /* Modern blue primary */
+    background-color: #3b82f6;
+    /* Modern blue primary */
     color: #ffffff;
     border: none;
     padding: 15px 30px;
@@ -143,7 +145,8 @@ body.dark-mode .StartTestButton {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    text-decoration: none; /* Ensure no underline */
+    text-decoration: none;
+    /* Ensure no underline */
     display: inline-block;
     text-align: center;
 }
@@ -330,86 +333,217 @@ body.dark-mode .footer-bottom {
 
 /* Tips Section */
 .tips {
-    margin: 20px 0; /* Reduce vertical spacing */
+    margin: 20px 0;
+    /* Reduce vertical spacing */
     padding: 20px;
-    background-color: white; /* Default light mode background */
+    background-color: white;
+    /* Default light mode background */
     border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
     text-align: left;
-    transition: transform 0.2s, box-shadow 0.2s; /* Animation for hover */
+    transition: transform 0.2s, box-shadow 0.2s;
+    /* Animation for hover */
 }
 
 .tips h2 {
     font-size: 1.5rem;
-    color: #2563eb; /* Match primary blue color */
+    color: #2563eb;
+    /* Match primary blue color */
     margin-bottom: 15px;
-    text-align: center; /* Center-align heading */
+    text-align: center;
+    /* Center-align heading */
 }
 
 .tips ul {
-    list-style-type: none; /* Remove default bullets */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
+    list-style-type: none;
+    /* Remove default bullets */
+    padding: 0;
+    /* Remove padding */
+    margin: 0;
+    /* Remove margin */
 }
 
 .tips ul li {
-    display: flex; /* Align icon and text */
+    display: flex;
+    /* Align icon and text */
     align-items: center;
-    gap: 15px; /* Space between icon and text */
-    background-color: #f9fafc; /* Subtle background for each tip */
-    padding: 12px 15px; /* Add padding */
-    margin-bottom: 10px; /* Space between tips */
-    border-radius: 8px; /* Round corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-    transition: transform 0.2s, box-shadow 0.2s; /* Hover effect */
+    gap: 15px;
+    /* Space between icon and text */
+    background-color: #f9fafc;
+    /* Subtle background for each tip */
+    padding: 12px 15px;
+    /* Add padding */
+    margin-bottom: 10px;
+    /* Space between tips */
+    border-radius: 8px;
+    /* Round corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    /* Subtle shadow */
+    transition: transform 0.2s, box-shadow 0.2s;
+    /* Hover effect */
 }
 
 .tips ul li:last-child {
-    margin-bottom: 0; /* Remove bottom margin for the last tip */
+    margin-bottom: 0;
+    /* Remove bottom margin for the last tip */
 }
+
 .tips ul li:hover {
-    transform: translateY(-3px); /* Lift on hover */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Enhance shadow */
+    transform: translateY(-3px);
+    /* Lift on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    /* Enhance shadow */
 }
 
 .tips ul li i {
-    font-size: 1.5rem; /* Icon size */
-    color: #2563eb; /* Match primary blue color */
+    font-size: 1.5rem;
+    /* Icon size */
+    color: #2563eb;
+    /* Match primary blue color */
 }
 
 .tips ul li p {
     margin: 0;
-    font-size: 1rem; /* Modern readable font size */
-    color: #333; /* Standard dark text color */
+    font-size: 1rem;
+    /* Modern readable font size */
+    color: #333;
+    /* Standard dark text color */
 }
 
 /* Dark Mode for Tips Section */
 body.dark-mode .tips {
-    background-color: #3b4252; /* Dark mode background */
-    color: #e5e5e5; /* Light text for dark mode */
-    box-shadow: none; /* Remove shadow for simplicity */
+    background-color: #3b4252;
+    /* Dark mode background */
+    color: #e5e5e5;
+    /* Light text for dark mode */
+    box-shadow: none;
+    /* Remove shadow for simplicity */
 }
 
 body.dark-mode .tips ul li {
-    background-color: #4c566a; /* Subtle dark background */
-    box-shadow: none; /* Simplified design for dark mode */
+    background-color: #4c566a;
+    /* Subtle dark background */
+    box-shadow: none;
+    /* Simplified design for dark mode */
 }
 
 body.dark-mode .tips ul li:hover {
-    background-color: #434c5e; /* Slightly darker on hover */
+    background-color: #434c5e;
+    /* Slightly darker on hover */
 }
 
 body.dark-mode .tips ul li i {
-    color: #81a1c1; /* Light blue for dark mode */
+    color: #81a1c1;
+    /* Light blue for dark mode */
 }
 
 body.dark-mode .tips ul li p {
-    color: #e5e5e5; /* Light text for dark mode */
+    color: #e5e5e5;
+    /* Light text for dark mode */
 }
 
 body.dark-mode .tips h2 {
-    color: #ccc; 
+    color: #ccc;
 }
-h2{
-    color: #2d8fbd; 
+
+h2 {
+    color: #2d8fbd;
+}
+
+
+/* Add these media queries at the end of your CSS file */
+
+@media screen and (max-width: 670px) {
+    .dashboard {
+        flex-direction: column;
+        /* Stack elements vertically */
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 10px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .sidebar .logo {
+        margin-bottom: 10px;
+    }
+
+    .sidebar .menu ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .sidebar .menu ul li {
+        margin: 5px 0;
+    }
+
+    .sidebar .menu ul li a {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .sidebar .menu ul li a i {
+        margin-right: 5px;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .topbar {
+        margin-top: 10px;
+    }
+
+    /* Adjust cards for mobile */
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    /* Adjust tips section for mobile */
+    .tips ul li {
+        padding: 10px;
+    }
+
+    .tips ul li i {
+        font-size: 1.2rem;
+    }
+
+    .tips ul li p {
+        font-size: 0.9rem;
+    }
+
+    /* Adjust footer for mobile */
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-section {
+        margin: 15px 0;
+    }
+}
+
+/* Additional adjustments for very small screens */
+@media screen and (max-width: 400px) {
+    .sidebar .menu ul li a {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+
+    .sidebar .menu ul li a i {
+        font-size: 0.9rem;
+    }
+
+    .topbar h1 {
+        font-size: 1.2rem;
+    }
 }

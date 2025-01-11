@@ -97,14 +97,18 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
       `;
 
-    document.getElementById("userInput").focus();
-    document
-      .getElementById("userInput")
-      .addEventListener("keypress", function (e) {
+    // Get input element once
+    const userInput = document.getElementById("userInput");
+    if (userInput) {
+      // Set focus
+      userInput.focus();
+      // Add enter key listener
+      userInput.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
           checkAnswer();
         }
       });
+    }
   }
 
   function startTest() {

@@ -44,8 +44,8 @@ document.addEventListener("DOMContentLoaded", function () {
     testArea.style.display = "block";
     //document.getElementById("instructions").style.display = "none";
     document.getElementById("instructions").innerText =
-        "Identify which side has the darker pattern!";
-      document.getElementById("instructions").style.cssText = `
+      "Identify which side has the darker pattern!";
+    document.getElementById("instructions").style.cssText = `
         text-align: center; 
         font-weight: bold;
         font-size: 20px;
@@ -97,9 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     contrastPattern.innerHTML = `
             <div style="position: relative; width: 300px; height: 300px; background-color: rgb(${backgroundColor}, ${backgroundColor}, ${backgroundColor}); margin: 20px auto; border: 1px solid #ccc;">
-                <div style="position: absolute; top: 25%; ${
-                  isLeft ? "left: 0" : "right: 0"
-                }; 
+                <div style="position: absolute; top: 25%; ${isLeft ? "left: 0" : "right: 0"
+      }; 
                     width: 50%; height: 50%; background-color: rgb(${squareColor}, ${squareColor}, ${squareColor});">
                 </div>
             </div>
@@ -165,6 +164,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function completeTest() {
+    // Hide the instruction elements
+    const title = document.getElementById('title');
+    const instructions = document.getElementById('instructions');
+    if (title) title.style.display = 'none';
+    if (instructions) instructions.style.display = 'none';
+
     const feedbackMsg = determineFeedback(score);
     testArea.innerHTML = `
             <style>

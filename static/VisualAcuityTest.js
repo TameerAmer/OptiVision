@@ -29,7 +29,9 @@ let rightEyeIncorrect = 0;
 let leftEyeIncorrect = 0;
 let feedBack = "";
 let testInProgress = false;
-
+let distanceCheckVisible = false;
+let distanceCheckInterval = null;
+let modelsLoaded = false;
 // Create a navigation confirmation modal
 function createNavigationConfirmationModal() {
   const modal = document.createElement("div");
@@ -76,7 +78,7 @@ function determineVisionFeedback(leftEye, rightEye) {
     feedback.color = "#f0ad4e";
   } else if (averageLevel <= 14) {
     feedback.message = "Your vision is okay, but consider an eye checkup for better clarity.";
-    feedback.color = "#f0ad4e"; 
+    feedback.color = "#f0ad4e";
   } else if (averageLevel >= 15 && averageLevel < 17) {
     feedback.message = "Your vision is very good, but remember to keep an eye on your health.";
     feedback.color = "#f0ad4e";
@@ -90,7 +92,152 @@ function determineVisionFeedback(leftEye, rightEye) {
   return feedback;
 }
 
+async function loadFaceDetectionModels() {
+  try {
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri('/static/models'),
+      faceapi.nets.faceLandmark68Net.loadFromUri('/static/models')
+    ]);
+    modelsLoaded = true;
+  } catch (error) {
+    console.error('Error loading models:', error);
+  }
+}
 
+function showDistanceCheck() {
+  if (distanceCheckVisible) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'distance-check-overlay';
+  overlay.innerHTML = `
+        <div class="distance-check-container">
+            <h3>Distance Measurement</h3>
+            <div class="camera-container">
+                <video id="camera-feed" autoplay playsinline></video>
+                <canvas id="face-overlay"></canvas>
+                <div id="distance-display" class="distance-display">
+                    Loading camera...
+                </div>
+            </div>
+            <div class="distance-instructions">
+                <p>Position your face in front of the camera</p>
+                <p>Keep your head stable for accurate measurement</p>
+                <p>Ideal distance is between 30-35 cm</p>
+            </div>
+            <button class="close-camera-btn">Close Camera</button>
+        </div>
+    `;
+  document.body.appendChild(overlay);
+
+  const closeBtn = overlay.querySelector('.close-camera-btn');
+  closeBtn.addEventListener('click', () => {
+    stopCamera();
+    overlay.remove();
+    distanceCheckVisible = false;
+  });
+
+  distanceCheckVisible = true;
+  if (!modelsLoaded) {
+    loadFaceDetectionModels().then(() => startCamera());
+  } else {
+    startCamera();
+  }
+}
+
+async function startCamera() {
+  const video = document.getElementById('camera-feed');
+  const canvas = document.getElementById('face-overlay');
+  const distanceDisplay = document.getElementById('distance-display');
+
+  if (!video || !canvas) {
+    console.error('Video or canvas element not found');
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: 'user',
+        width: { ideal: 640 },
+        height: { ideal: 480 }
+      }
+    });
+
+    video.srcObject = stream;
+    video.play();
+
+    canvas.width = video.width;
+    canvas.height = video.height;
+
+    // Start face detection loop
+    if (distanceCheckInterval) {
+      clearInterval(distanceCheckInterval);
+    }
+
+    distanceCheckInterval = setInterval(async () => {
+      if (!video.paused && !video.ended) {
+        const detections = await faceapi.detectAllFaces(
+          video,
+          new faceapi.TinyFaceDetectorOptions()
+        ).withFaceLandmarks();
+
+        if (detections && detections.length > 0) {
+          const distance = calculateDistance(detections[0].detection.box);
+          updateDistanceDisplay(distance, distanceDisplay);
+        }
+      }
+    }, 100);
+
+  } catch (error) {
+    console.error('Camera start error:', error);
+    alert('Unable to access camera. Please allow camera access.');
+  }
+}
+
+function calculateDistance(faceBox) {
+  // Adjusted constants for more accurate measurement
+  const AVERAGE_FACE_WIDTH = 20; // Slightly adjusted average face width
+  const FOCAL_LENGTH = 715; // Increased focal length
+  const CALIBRATION_FACTOR = 1.2; // Added calibration factor
+
+  // Use the face width detected by face-api.js
+  const faceWidthInPixels = faceBox.width;
+
+  // Calculate distance with calibration factor
+  const distance = Math.round((AVERAGE_FACE_WIDTH * FOCAL_LENGTH) / (faceWidthInPixels * CALIBRATION_FACTOR));
+
+  return distance;
+}
+
+function updateDistanceDisplay(distance, displayElement) {
+  let message, className;
+  if (distance < 30) {
+    message = `Too close! Move back (${distance} cm)`;
+    className = 'too-close';
+  } else if (distance > 40) {  // Changed from 30 to 40 for 5cm tolerance
+    message = `Too far! Move closer (${distance} cm)`;
+    className = 'too-far';
+  } else {
+    message = `Perfect distance! (${distance} cm)`;
+    className = 'perfect';
+  }
+  displayElement.textContent = message;
+  displayElement.className = `distance-display ${className}`;
+}
+
+function stopCamera() {
+  if (distanceCheckInterval) {
+    clearInterval(distanceCheckInterval);
+    distanceCheckInterval = null;
+  }
+
+  const video = document.getElementById('camera-feed');
+  if (video && video.srcObject) {
+    const tracks = video.srcObject.getTracks();
+    tracks.forEach(track => track.stop());
+    video.srcObject = null;
+  }
+}
 // Function to handle closing the cover eye message
 function handleCoverEyeOK() {
   const coverEyeMessage = document.getElementById("cover-eye-message");
@@ -370,6 +517,8 @@ document.addEventListener("DOMContentLoaded", function () {
   if (startTestBtn) {
     startTestBtn.addEventListener("click", startTest);
   }
+  const showDigitalRulerBtn = document.getElementById('show-digital-ruler');
+  showDigitalRulerBtn.addEventListener('click', createDigitalRuler);
 
   // OK Button for initial instructions
   const okButton = document.getElementById("okButton");
@@ -398,6 +547,67 @@ document.addEventListener("DOMContentLoaded", function () {
     coverEyeOkButton.addEventListener("click", handleCoverEyeOK);
   }
 });
+
+
+function createDigitalRuler() {
+  // Create modal
+  const modal = document.createElement('div');
+  modal.className = 'digital-ruler-modal';
+
+  // Calculate physical size with adjusted DPI
+  const dpi = getDPI();
+  const cmInPixels = dpi / 2.54; // Convert DPI to pixels per cm
+  const rulerWidth = cmInPixels * 5; // 5cm in pixels
+
+  modal.innerHTML = `
+      <div class="digital-ruler-content">
+          <div class="digital-ruler" style="width: ${rulerWidth}px; height: 40px;">
+          <div class="ruler-marks"></div>
+          </div>
+          <p>Use this as reference to adjust the black line.</p>
+          <button class="digital-ruler-btn" onclick="this.closest('.digital-ruler-modal').style.display='none'">Close</button>
+      </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Add ruler markings
+  const rulerMarks = modal.querySelector('.ruler-marks');
+  const millimetersPerMark = cmInPixels / 10; // 1mm in pixels
+
+  for (let i = 0; i <= 50; i++) { // 50 millimeters = 5cm
+    const mark = document.createElement('div');
+    mark.className = 'ruler-mark';
+    if (i % 10 === 0) { // Every centimeter
+      mark.className += ' cm';
+      const number = document.createElement('span');
+      number.className = 'ruler-number';
+      number.textContent = i / 10;
+      mark.appendChild(number);
+    }
+    mark.style.left = `${i * millimetersPerMark}px`;
+    rulerMarks.appendChild(mark);
+  }
+
+  // Show modal
+  modal.style.display = 'flex';
+}
+
+function getDPI() {
+  const div = document.createElement('div');
+  div.style.width = '1in';
+  div.style.height = '1in';
+  div.style.position = 'fixed';
+  div.style.left = '-100%';
+  document.body.appendChild(div);
+
+  const dpi = div.offsetWidth;
+  document.body.removeChild(div);
+
+  // Adjust calibration factor to get from 4.5cm to 5cm
+  const calibrationFactor = 1.15; //js is not acc
+  return dpi * calibrationFactor;
+}
 
 function saveTestResult() {
   const resultData = {
@@ -446,32 +656,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Update the calibration line dynamically based on slider value
   calibrationSlider.addEventListener("input", () => {
-      const sliderValue = calibrationSlider.value;
-      calibrationLine.style.width = `${sliderValue}px`;
+    const sliderValue = calibrationSlider.value;
+    calibrationLine.style.width = `${sliderValue}px`;
   });
 
   // Handle calibration confirmation
   calibrationOk.addEventListener("click", () => {
-      const sliderValue = calibrationSlider.value;
-      const calibratedPxPerCm = sliderValue / 5; // 5 cm as the reference
-      const scalingFactor = calibratedPxPerCm / basePxPerCm;
+    const sliderValue = calibrationSlider.value;
+    const calibratedPxPerCm = sliderValue / 5; // 5 cm as the reference
+    const scalingFactor = calibratedPxPerCm / basePxPerCm;
 
-      adjustTests(scalingFactor);
+    adjustTests(scalingFactor);
 
-      // Hide the calibration page and show the instructions page
-      calibrationPage.style.display = "none";
-      instructionsPage.style.display = "block";
+    // Hide the calibration page and show the instructions page
+    calibrationPage.style.display = "none";
+    instructionsPage.style.display = "block";
 
-      console.log(`Calibration complete. pxPerCm: ${calibratedPxPerCm}, Scaling Factor: ${scalingFactor}`);
+    console.log(`Calibration complete. pxPerCm: ${calibratedPxPerCm}, Scaling Factor: ${scalingFactor}`);
   });
 
   // Function to adjust the tests array based on the scaling factor
   function adjustTests(scalingFactor) {
-      tests.forEach((test) => {
-          const originalWidth = parseFloat(test.width.replace("px", ""));
-          test.width = `${originalWidth * scalingFactor}px`;
-      });
-      console.log("Adjusted tests:", tests);
+    tests.forEach((test) => {
+      const originalWidth = parseFloat(test.width.replace("px", ""));
+      test.width = `${originalWidth * scalingFactor}px`;
+    });
+    console.log("Adjusted tests:", tests);
   }
 });
 

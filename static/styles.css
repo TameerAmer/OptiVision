@@ -38,7 +38,7 @@ body.dark-mode {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 1;
-    width:100%;
+    width: 100%;
 }
 
 .dark-mode .welcome-banner {
@@ -50,7 +50,8 @@ body.dark-mode {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%; /* Ensure full width */
+    width: 100%;
+    /* Ensure full width */
     padding: 40px 20px;
 }
 
@@ -230,6 +231,6 @@ a:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -10; /* Always below other components */
+    z-index: -10;
+    /* Always below other components */
 }
-

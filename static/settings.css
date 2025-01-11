@@ -13,7 +13,8 @@ body.dark-mode {
 }
 
 .settings-container {
-    margin-left: 260px; /* Matches the sidebar width */
+    margin-left: 260px;
+    /* Matches the sidebar width */
     padding: 20px;
 }
 
@@ -185,34 +186,47 @@ body.dark-mode .danger-actions button:hover {
 
 /* Theme Toggle Button */
 #theme-toggle {
-    position: fixed; /* Fix the button in place */
-    top: 20px; /* Position it from the top */
-    right: 20px; /* Position it on the right side */
+    position: fixed;
+    /* Fix the button in place */
+    top: 20px;
+    /* Position it from the top */
+    right: 20px;
+    /* Position it on the right side */
     background-color: transparent;
     border: none;
-    color: #333; /* Default color for the icon */
-    font-size: 24px; /* Icon size */
+    color: #333;
+    /* Default color for the icon */
+    font-size: 24px;
+    /* Icon size */
     cursor: pointer;
     transition: color 0.3s ease;
-    z-index: 1100; /* Ensure it stays on top of other elements */
+    z-index: 1100;
+    /* Ensure it stays on top of other elements */
 }
 
 body.dark-mode #theme-toggle {
-    color: #e5e9f0; /* Light icon color in dark mode */
+    color: #e5e9f0;
+    /* Light icon color in dark mode */
 }
 
 .sidebar {
-    width: 260px; /* Sidebar width */
+    width: 260px;
+    /* Sidebar width */
     background-color: #1f2937;
     color: white;
     padding: 20px 0;
     display: flex;
     flex-direction: column;
-    position: fixed; /* Fixes the sidebar on the left */
-    top: 0; /* Aligns it to the top */
-    left: 0; /* Aligns it to the left */
-    height: 100%; /* Full-height sidebar */
-    z-index: 1000; /* Ensures it stays above other content */
+    position: fixed;
+    /* Fixes the sidebar on the left */
+    top: 0;
+    /* Aligns it to the top */
+    left: 0;
+    /* Aligns it to the left */
+    height: 100%;
+    /* Full-height sidebar */
+    z-index: 1000;
+    /* Ensures it stays above other content */
 }
 
 .sidebar .logo {
@@ -259,8 +273,8 @@ body.dark-mode .sidebar .menu ul li a {
 body.dark-mode .sidebar .menu ul li a.active,
 body.dark-mode .sidebar .menu ul li a:hover {
     background-color: #4c566a;
-} 
+}
 
-h2{
-    color: #2d8fbd; 
+h2 {
+    color: #2d8fbd;
 }

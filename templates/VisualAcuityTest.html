@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OptiVision-Visual Acuity Test</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='VisualAcuityTest.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 </head>
 
 <body>
     <div id="calibration-page" style="display: block; text-align: center;">
         <h1>Screen Calibration</h1>
-        <p>1) Bring a ruler</p><br>
+        <p>1) Bring a ruler</p>
+        <p>- OR -</p>
+        <button id="show-digital-ruler" class="digital-ruler-btn">Show Digital Ruler</button><br>
         <p>2) Adjust the slider so the black line below is exactly 5 cm when measured with your ruler.</p>
         <div id="calibration-line" style="width: 175px; height: 2px; background: black; margin: 20px auto;"></div>
         <input type="range" id="calibration-slider" min="50" max="500" value="175"
@@ -25,10 +28,19 @@
         <p id="instructions">I)Make sure to turn your brightness all the
             way up! <br><br>
             II)Please cover your left eye!<br><br>
-            III)Keep your head in a distance of 30-35 cm from the screen<br><br>
+            III)Keep your head in a distance of 30-40 cm from the screen<br><br>
             <b>IV)Find the gap and mark it on the lower ring!</b><br><br>
             *You will be asked to cover your right eye after the left eye test!
+            <button onclick="showDistanceCheck()" class="distance-check-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
+                </svg>
+                Check Distance from Screen
+            </button>
         </p>
+
         <!-- Pop-up message container -->
         <div id="cover-eye-message">
             <div class="popup-content">

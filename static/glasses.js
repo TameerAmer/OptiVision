@@ -34,10 +34,10 @@ function updateGlassesStatus(wearsGlasses) {
         },
         body: JSON.stringify({ wearsGlasses: wearsGlasses })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Glasses status updated:", data);
-    })
-    .catch(error => console.error('Error updating glasses status:', error));
+        .then(response => response.json())
+        .then(data => {
+            console.log("Glasses status updated:", data);
+        })
+        .catch(error => console.error('Error updating glasses status:', error));
 }
 

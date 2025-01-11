@@ -6,7 +6,7 @@ if (localStorage.getItem('darkMode') === 'enabled') {
 }
 
 // Dark/Light Mode Toggle Function
-document.getElementById('theme-toggle').addEventListener('click', function() {
+document.getElementById('theme-toggle').addEventListener('click', function () {
     // Toggle Dark Mode on body
     document.body.classList.toggle('dark-mode');
 
@@ -31,13 +31,13 @@ const testTypeFilter = document.getElementById('test-type-filter');
 const reportsTable = document.querySelector('.reports-table tbody');
 
 // Event listener for date filter
-dateFilter.addEventListener('change', function() {
+dateFilter.addEventListener('change', function () {
     const selectedDateFilter = dateFilter.value;
     filterReports(selectedDateFilter, testTypeFilter.value);
 });
 
 // Event listener for test type filter
-testTypeFilter.addEventListener('change', function() {
+testTypeFilter.addEventListener('change', function () {
     const selectedTestType = testTypeFilter.value;
     filterReports(dateFilter.value, selectedTestType);
 });
