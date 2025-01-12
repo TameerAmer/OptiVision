@@ -517,9 +517,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (startTestBtn) {
     startTestBtn.addEventListener("click", startTest);
   }
-  const showDigitalRulerBtn = document.getElementById('show-digital-ruler');
-  showDigitalRulerBtn.addEventListener('click', createDigitalRuler);
-
   // OK Button for initial instructions
   const okButton = document.getElementById("okButton");
   if (okButton) {
@@ -547,67 +544,6 @@ document.addEventListener("DOMContentLoaded", function () {
     coverEyeOkButton.addEventListener("click", handleCoverEyeOK);
   }
 });
-
-
-function createDigitalRuler() {
-  // Create modal
-  const modal = document.createElement('div');
-  modal.className = 'digital-ruler-modal';
-
-  // Calculate physical size with adjusted DPI
-  const dpi = getDPI();
-  const cmInPixels = dpi / 2.54; // Convert DPI to pixels per cm
-  const rulerWidth = cmInPixels * 5; // 5cm in pixels
-
-  modal.innerHTML = `
-      <div class="digital-ruler-content">
-          <div class="digital-ruler" style="width: ${rulerWidth}px; height: 40px;">
-          <div class="ruler-marks"></div>
-          </div>
-          <p>Use this as reference to adjust the black line.</p>
-          <button class="digital-ruler-btn" onclick="this.closest('.digital-ruler-modal').style.display='none'">Close</button>
-      </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  // Add ruler markings
-  const rulerMarks = modal.querySelector('.ruler-marks');
-  const millimetersPerMark = cmInPixels / 10; // 1mm in pixels
-
-  for (let i = 0; i <= 50; i++) { // 50 millimeters = 5cm
-    const mark = document.createElement('div');
-    mark.className = 'ruler-mark';
-    if (i % 10 === 0) { // Every centimeter
-      mark.className += ' cm';
-      const number = document.createElement('span');
-      number.className = 'ruler-number';
-      number.textContent = i / 10;
-      mark.appendChild(number);
-    }
-    mark.style.left = `${i * millimetersPerMark}px`;
-    rulerMarks.appendChild(mark);
-  }
-
-  // Show modal
-  modal.style.display = 'flex';
-}
-
-function getDPI() {
-  const div = document.createElement('div');
-  div.style.width = '1in';
-  div.style.height = '1in';
-  div.style.position = 'fixed';
-  div.style.left = '-100%';
-  document.body.appendChild(div);
-
-  const dpi = div.offsetWidth;
-  document.body.removeChild(div);
-
-  // Adjust calibration factor to get from 4.5cm to 5cm
-  const calibrationFactor = 1.15; //js is not acc
-  return dpi * calibrationFactor;
-}
 
 function saveTestResult() {
   const resultData = {
