@@ -14,13 +14,19 @@ body {
 
 /* Sidebar Styles */
 .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 260px;
+    height: calc(100vh - 60px); /* Subtract footer height if footer height is fixed */
+    overflow-y: auto; /* Sidebar scrolls if content overflows */
     background-color: #1f2937;
     color: white;
     padding: 20px 0;
     display: flex;
     flex-direction: column;
 }
+
 
 .sidebar .logo {
     font-size: 1.8rem;
@@ -57,11 +63,16 @@ body {
 
 /* Main Content */
 .main-content {
-    flex: 1;
+    margin-left: 260px; /* Sidebar width */
     padding: 20px 30px;
+    flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: calc(100vh - 60px); /* Subtract footer height */
+    overflow-y: auto;
 }
+
+
 
 /* Reports Header */
 .reports-header {
@@ -243,19 +254,23 @@ body.dark-mode .btn-view:hover {
 
 /* Footer */
 .footer {
-    margin-top: auto;
-    width: 100%;
+    position: relative;
+    width: calc(100% - 260px); /* Subtract the sidebar width */
+    margin-left: 260px; /* Align with main content */
     background-color: #2563eb;
     color: white;
+    text-align: center;
+    padding: 15px 0;
 }
 
 .footer-container {
     display: flex;
     justify-content: space-around;
-    padding: 40px 20px;
+    padding: 20px;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 20px;
 }
+
 
 .footer-section {
     flex: 1;
