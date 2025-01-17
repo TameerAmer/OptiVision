@@ -5,11 +5,11 @@ from datetime import datetime
 
 class ConnectDatabase:
     def __init__(self):
-        self._host = "junction.proxy.rlwy.net"
+        self._host = "roundhouse.proxy.rlwy.net"
         self._user = "root"
-        self._password = "AdGzajmAwcJPccXxoWqeFGAEiQISUGeM"
+        self._password = "wpJHHCyKGvvksavNQQsNzRfzvBTDHgSf"
         self._database = "railway"
-        self._port = 22274
+        self._port = 32117
         
         self.con = None
         self.cursor = None
