@@ -461,7 +461,7 @@ class ConnectDatabase:
                 UNION ALL
                 SELECT test_id AS id, 'Watch Dot', test_date, 
                     CAST(score AS UNSIGNED) AS obtained_score, 
-                    20 AS total_tests,
+                    2 AS total_tests,
                     CONCAT(score, '/', 2) AS score_display, 
                     CASE WHEN score = 2 THEN 'Pass' ELSE 'Fail' END AS status, feedback
                 FROM watch_dot WHERE user_id = %s
