@@ -234,3 +234,28 @@ a:hover {
     z-index: -10;
     /* Always below other components */
 }
+
+.help-icon {
+    margin-top: 10px;
+    text-align: left; /* Align with the text in the About section */
+}
+
+.help-icon a {
+    color: #81a1c1;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.help-icon a i {
+    margin-right: 5px;
+    font-size: 18px;
+}
+
+.help-icon a:hover {
+    color: #2563eb;
+}
+
