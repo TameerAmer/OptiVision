@@ -1,12 +1,14 @@
-:: this bat file is used to set git repository
-:: to run use .\set_git.bat
+:: This batch file updates the Capstone-Project repository with new changes.
 @echo off
-:: add :: before the next row to initialize the repository
-::exit /b
 
-git init
+:: Add all changes (including new files/directories)
 git add .
-git commit -m "first commit"
-git branch -M main
-::git remote add origin https://github.com/TameerAmer/FinalProject.git
-git push -u origin main --force
+
+:: Commit the changes with a meaningful message
+git commit -m "Add Phase B directory with updates"
+
+:: Push changes to the remote repository
+git push origin main
+
+@echo Git update complete!
+pause
