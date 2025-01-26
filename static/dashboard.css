@@ -547,3 +547,36 @@ h2 {
         font-size: 1.2rem;
     }
 }
+
+#help-icon {
+    position: fixed;
+    bottom: 20px; /* Distance from the bottom of the screen */
+    left: 20px;  /* Distance from the left side of the screen */
+    z-index: 1000; /* Ensure it appears above other content */
+    background-color: #2563eb;
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Makes it a perfect circle */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#help-icon a {
+    color: white;
+    text-decoration: none;
+    font-size: 30px; /* Adjust icon size */
+}
+
+#help-icon:hover {
+    background-color: #1549b8;
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+.dark-mode #help-icon {
+    background-color: #81a1c1;
+}

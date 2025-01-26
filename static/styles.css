@@ -235,27 +235,39 @@ a:hover {
     /* Always below other components */
 }
 
-.help-icon {
-    margin-top: 10px;
-    text-align: left; /* Align with the text in the About section */
-}
 
-.help-icon a {
-    color: #81a1c1;
-    font-weight: 500;
-    text-decoration: none;
-    font-size: 16px;
-    display: inline-flex;
+#help-icon {
+    position: fixed;
+    bottom: 20px; /* Distance from the bottom of the screen */
+    left: 20px;  /* Distance from the left side of the screen */
+    z-index: 1000; /* Ensure it appears above other content */
+    background-color: #2563eb;
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
     align-items: center;
-    transition: color 0.3s ease;
+    justify-content: center;
+    border-radius: 50%; /* Makes it a perfect circle */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.help-icon a i {
-    margin-right: 5px;
-    font-size: 18px;
+#help-icon a {
+    color: white;
+    text-decoration: none;
+    font-size: 30px; /* Adjust icon size */
 }
 
-.help-icon a:hover {
-    color: #2563eb;
+#help-icon:hover {
+    background-color: #1549b8;
+    transform: scale(1.1); /* Slight zoom on hover */
 }
+
+.dark-mode #help-icon {
+    background-color: #81a1c1;
+}
+
+
 
