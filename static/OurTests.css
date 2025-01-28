@@ -23,10 +23,27 @@ body {
 }
 
 .sidebar .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.sidebar .logo img {
+    width: 160px; /* Adjust as needed */
+    height: auto;
+    display: block;
+    border-radius: 160px; /* Soft edges */
+    object-fit: contain; /* Ensures proper scaling */
+    background: transparent;
+    mix-blend-mode: screen; /* Helps blend with dark mode */
+    filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.2));
+    animation: shine-effect 2s infinite alternate ease-in-out;
+}
+body.dark-mode .sidebar .logo img {
+    mix-blend-mode: lighten; /* Blends better with dark backgrounds */
+    filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.2));
 }
 
 .sidebar .menu ul {
@@ -334,4 +351,13 @@ h2 {
 
 .dark-mode #help-icon {
     background-color: #81a1c1;
+}
+
+@keyframes shine-effect {
+    0% {
+        filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.3));
+    }
+    100% {
+        filter: drop-shadow(0px 0px 20px rgba(255, 255, 255, 0.8));
+    }
 }

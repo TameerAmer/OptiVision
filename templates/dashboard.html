@@ -14,7 +14,9 @@
     <div class="dashboard">
         <aside class="sidebar">
             <div class="logo">
-                <h2>OptiVision</h2>
+                <a href="{{ url_for('dashboard') }}" class="active">
+                    <img src="{{ url_for('static', filename='images/myIcon.webp') }}" alt="OptiVision Logo">
+                </a>
             </div>
             <nav class="menu">
                 <ul>
@@ -112,7 +114,8 @@
         </div>
     </footer>
     <div id="help-icon">
-        <a href="https://www.youtube.com/watch?v=HeVl6qc_6lc" target="_blank" rel="noopener noreferrer" aria-label="Help">
+        <a href="https://www.youtube.com/watch?v=HeVl6qc_6lc" target="_blank" rel="noopener noreferrer"
+            aria-label="Help">
             <i class="fas fa-question-circle"></i>
         </a>
     </div>

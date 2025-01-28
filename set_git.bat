@@ -6,7 +6,7 @@
 
 git init
 git add .
-git commit -m "first commit"
+git commit -m "Style improvements"
 git branch -M main
-git remote add origin https://github.com/TameerAmer/Capstone-Project/Phase B.git
+git remote add origin https://github.com/TameerAmer/OptiVision.git
 git push -u origin main --force
